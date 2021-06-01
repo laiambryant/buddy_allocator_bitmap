@@ -34,6 +34,7 @@ typedef struct BitMap{
     uint8_t *Buf; //Bitmap will be stored here
     DATA_MAX buffer_size;
     DATA_MAX num_bits;
+    DATA_MAX allocated_bits;
 } BitMap;
 
 // returns the number of bytes to store bits booleans

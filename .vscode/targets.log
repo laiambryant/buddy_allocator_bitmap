@@ -1,4 +1,6 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+ 
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -6,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Jun  1 20:25:22 2021
+# Make data base, printed on Tue Jun  1 20:38:08 2021
 
 # Variables
 
@@ -147,7 +149,7 @@ SSH_AGENT_PID = 1480
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # makefile (from 'makefile', line 9)
-BINS_DIR = OUT/Bins
+BINS_DIR = OUT/Bins/
 # environment
 GTK_MODULES = gail:atk-bridge
 # environment
@@ -226,6 +228,8 @@ MAKE_COMMAND := make
 VSCODE_NODE_CACHED_DATA_DIR = /home/liam/.config/Code/CachedData/054a9295330880ed74ceaedda236253b4f39a335
 # default
 .VARIABLES := 
+# makefile (from 'makefile', line 13)
+BINS = $(BINS_DIR)BM_test $(BINS_DIR)Bud_test
 # automatic
 *F = $(notdir $*)
 # environment
@@ -288,6 +292,7 @@ WINDOWPATH = 2
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
 # environment
 GJS_DEBUG_OUTPUT = stderr
+ 
 # default
 .RECIPEPREFIX := 
 # environment
@@ -297,7 +302,7 @@ LANG = C
 # environment
 VSCODE_PID = 5019
 # variable set hash-table stats:
-# Load=143/1024=14%, Rehash=0, Collisions=28/168=17%
+# Load=144/1024=14%, Rehash=0, Collisions=28/169=17%
 
 # Pattern-specific Variable Values
 
@@ -319,14 +324,11 @@ BitmapTest:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 42):
+#  recipe to execute (from 'makefile', line 44):
 	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* Buddy.* 
 	./BM_test
 	mv BM_test $(BINS_DIR)
 
- 
-make: *** No rule to make target 'all'.  Stop.
- 
 # Not a target:
 all:
 #  Command line target.
@@ -337,7 +339,7 @@ all:
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-01 20:25:03.964503418
+#  Last modified 2021-06-01 20:37:58.759494433
 #  File has been updated.
 #  Successfully updated.
 
@@ -345,14 +347,14 @@ buddy.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 20):
+#  recipe to execute (from 'makefile', line 22):
 	$(CC) $(CCOPTS) $(CC_DUMP) Main.c Bitmap.* Buddy.* 
 
 buddy:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 14):
+#  recipe to execute (from 'makefile', line 16):
 	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.* Buddy.* 
 	./Bud_test
 	mv Bud_test $(BINS_DIR)
@@ -372,32 +374,42 @@ clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 47):
-	rm -rf *.o Bud_test *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS_DIR)*.*
+#  recipe to execute (from 'makefile', line 55):
+	rm -rf *.o Bud_test *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS)
 
 buddyDump: buddy.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 36):
+#  recipe to execute (from 'makefile', line 38):
 	objdump -d Bitmap.o > Bitmap_dump.txt Buddy.o > Buddy_dump.txt Main.o > Main_dump.txt
 	mv *.txt $(DUMPS_DIR)
+
+BitmapVG:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'makefile', line 49):
+	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* Buddy.*  
+	valgrind $(VGOPTS)--log-file=bm-valgrind-out.txt \./BM_test
+	mv bm-valgrind-out.txt $(OUT_DIR)
+	rm -rf gmon.out BM_test
 
 buddyVG:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 23):
+#  recipe to execute (from 'makefile', line 25):
 	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.* Buddy.* 
-	valgrind $(VGOPTS)--log-file=bm-valgrind-out.txt \./Bud_test
-	mv bm-valgrind-out.txt $(OUT_DIR)
+	valgrind $(VGOPTS)--log-file=bud-valgrind-out.txt \./Bud_test
+	mv bud-valgrind-out.txt $(OUT_DIR)
 	rm -rf gmon.out Bud_test
 
 buddyGProf:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 29):
+#  recipe to execute (from 'makefile', line 31):
 	$(CC) $(CCOPTS) $(CC_GPROF) -o Bud_test Main.c Bitmap.* Buddy.* 
 	./Bud_test
 	gprof Bud_test gmon.out > Bud_TestGprof.txt
@@ -405,19 +417,19 @@ buddyGProf:
 	rm -rf gmon.out Bud_test
 
 # files hash-table stats:
-# Load=12/1024=1%, Rehash=0, Collisions=0/26=0%
+# Load=13/1024=1%, Rehash=0, Collisions=0/27=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 26 / storage = 214 B / avg = 8 B
-# current buf: size = 8162 B / used = 214 B / count = 26 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 27 / storage = 223 B / avg = 8 B
+# current buf: size = 8162 B / used = 223 B / count = 27 / avg = 8 B
 
-# strcache performance: lookups = 42 / hit rate = 38%
+# strcache performance: lookups = 44 / hit rate = 38%
 # hash-table stats:
-# Load=26/8192=0%, Rehash=0, Collisions=1/42=2%
-# Finished Make data base on Tue Jun  1 20:25:22 2021
+# Load=27/8192=0%, Rehash=0, Collisions=1/44=2%
+# Finished Make data base on Tue Jun  1 20:38:08 2021
 
  

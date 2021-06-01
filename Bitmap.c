@@ -19,7 +19,7 @@ void BitMap_init(BitMap *bit_map, DATA_MAX num_bits, uint8_t *buffer){
 // status= 0 or 1
 void BitMap_setBit(BitMap *bit_map, DATA_MAX bit_num, Status status){
     DATA_MAX byte_num = bit_num>>3;
-    //assert(byte_num<bit_map->buffer_size);
+    assert(byte_num<bit_map->buffer_size);
     DATA_MAX bit_in_byte = byte_num & 0x03;
     if(status==ALLOCATED) 
         bit_map->Buf[byte_num] |= (1<<bit_in_byte);
@@ -30,7 +30,7 @@ void BitMap_setBit(BitMap *bit_map, DATA_MAX bit_num, Status status){
 // inspects the status of the bit bit_num
 Status BitMap_bit(BitMap *bit_map, DATA_MAX bit_num){
     DATA_MAX byte_num = bit_num>>3;
-    //assert(byte_num<bit_map->buffer_size);
+    assert(byte_num<bit_map->buffer_size);
     DATA_MAX bit_in_byte = byte_num & 0x03;
     if ((bit_map->Buf[byte_num]&(1<<bit_in_byte))!=0)
         return ALLOCATED;
@@ -42,7 +42,7 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
         if(out_mode==F_WRITE){
             FILE* f = fopen("OUT/bitmap.txt", "w");
             fprintf(f, "Bitmap Metadata:\n ");
-            fprintf(f, "%d buffer size\t%d bits\t%d bytes\n", bit_map->buffer_size, bit_map->num_bits, bit_map->buffer_size);
+            fprintf(f, "%d bits\t%d bytes\n", bit_map->num_bits, bit_map->buffer_size);
             fprintf(f, "Bitmap STATUS:\n ");
             for(DATA_MAX i=0; i<bit_map->num_bits; i++){
                 fprintf(f, "%d", BitMap_bit(bit_map, i));
@@ -52,7 +52,7 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
         }
         if(out_mode==STDOUT){
             printf("Bitmap Metadata:\n "); 
-            printf("%d buffer size\t%d bits\t%d bytes\n", bit_map->buffer_size, bit_map->num_bits, bit_map->buffer_size);
+            printf("%d bits\t%d bytes\n",bit_map->num_bits, bit_map->buffer_size);
             printf("Bitmap STATUS:\n ");
             for(DATA_MAX i=0; i<bit_map->num_bits; i++){
                 printf("%d", BitMap_bit(bit_map, i));
@@ -63,7 +63,7 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
         if(out_mode==F_CONCAT){
             FILE* f = fopen("OUT/bitmap.txt", "a");
             fprintf(f, "Bitmap Metadata:\n ");
-            fprintf(f, "%d buffer size\t%d bits\t%d bytes\n", bit_map->buffer_size, bit_map->num_bits, bit_map->buffer_size);
+            fprintf(f, "%d bits\t%d bytes\n",  bit_map->num_bits, bit_map->buffer_size);
             fprintf(f, "Bitmap STATUS:\n ");
             for(DATA_MAX i=0; i<bit_map->num_bits; i++){
                 fprintf(f, "%d", BitMap_bit(bit_map, i));

@@ -23,8 +23,8 @@ buddy.o:
 
 buddyVG:
 	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.* Buddy.* 
-	valgrind $(VGOPTS)--log-file=bm-valgrind-out.txt \./Bud_test
-	mv bm-valgrind-out.txt $(OUT_DIR)
+	valgrind $(VGOPTS)--log-file=bud-valgrind-out.txt \./Bud_test
+	mv bud-valgrind-out.txt $(OUT_DIR)
 	rm -rf gmon.out Bud_test
 
 buddyGProf:
@@ -44,6 +44,12 @@ BitmapTest:
 	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* Buddy.* 
 	./BM_test
 	mv BM_test $(BINS_DIR)
+
+BitmapVG:
+	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* Buddy.*  
+	valgrind $(VGOPTS)--log-file=bm-valgrind-out.txt \./BM_test
+	mv bm-valgrind-out.txt $(OUT_DIR)
+	rm -rf gmon.out BM_test
 
 clean:
 	rm -rf *.o Bud_test *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS)
