@@ -1,0 +1,7 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/liam/Documents/buddy_allocator_bitmap'
+gcc -Wall -g -std=gnu99  -o Bud_test Main.c Bitmap.* Buddy.* 
+./Bud_test
+mv Bud_test OUT/Bins
+make: Leaving directory '/home/liam/Documents/buddy_allocator_bitmap'
+ 

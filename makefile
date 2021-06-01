@@ -6,11 +6,17 @@ CC_GPROF = -pg
 CC_DUMP= -c
 
 OUT_DIR=OUT/
-DUMPS_DIR=OUT/Dumps
+BINS_DIR=OUT/Bins/
+DUMPS_DIR=OUT/Dumps/
+TEST_DIR=Tests/
+
+BINS=$(BINS_DIR)BM_test $(BINS_DIR)Bud_test
 
 buddy:
 	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.* Buddy.* 
 	./Bud_test
+	mv Bud_test $(BINS_DIR)
+
 
 buddy.o: 
 	$(CC) $(CCOPTS) $(CC_DUMP) Main.c Bitmap.* Buddy.* 
@@ -32,7 +38,14 @@ buddyDump: buddy.o
 	objdump -d Bitmap.o > Bitmap_dump.txt Buddy.o > Buddy_dump.txt Main.o > Main_dump.txt
 	mv *.txt $(DUMPS_DIR)
 
+buddyDebug: buddyGProf buddyVG buddyDump
+
+BitmapTest:
+	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* Buddy.* 
+	./BM_test
+	mv BM_test $(BINS_DIR)
+
 clean:
-	rm -rf *.o Bud_test *.h.gch
+	rm -rf *.o Bud_test *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS)
 
 
