@@ -13,7 +13,7 @@
         If I have 2MB memory, and need to allocate <256Kb memory will be divided in 2 three times.
         2MB/2 1MB/2 512KB/2 256KB -> bitmap will be modified as follows:
         0     00    0000    00000000
-    To understand @what level of the tree you are you find the exponent of 2^x=len_bitmap => log_2(len_bitmap) = level
+    To understand @what level of the tree you are you find the exponent of //2^level=node_idx => floor(log_2(node_idx)) = level
     If i want to find parent node i must divide index of the child by 2.
 
 */
@@ -25,9 +25,9 @@ typedef enum Status{
 }Status;
 
 typedef enum OUT_MODE{
-    STDOUT = 0,
-    F_WRITE = 1,
-    F_CONCAT = 2
+    STDOUT = 0,  //stdout
+    F_WRITE = 1, //fprintf w
+    F_CONCAT = 2 //fprintf a
 } OUT_MODE;
 
 typedef struct BitMap{

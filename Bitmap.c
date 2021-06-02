@@ -51,13 +51,13 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
             fclose(f);
         }
         if(out_mode==STDOUT){
-            printf("Bitmap Metadata:\n "); 
-            printf("%d bits\t%d bytes\n",bit_map->num_bits, bit_map->buffer_size);
-            printf("Bitmap STATUS:\n ");
+            fprintf(stdout,"Bitmap Metadata:\n "); 
+            fprintf(stdout,"%d bits\t%d bytes\n",bit_map->num_bits, bit_map->buffer_size);
+            fprintf(stdout,"Bitmap STATUS:\n ");
             for(DATA_MAX i=0; i<bit_map->num_bits; i++){
-                printf("%d", BitMap_bit(bit_map, i));
+                fprintf(stdout,"%d", BitMap_bit(bit_map, i));
             }
-            printf("\n----------------------------------------------------------------------------------------------\n");
+            fprintf(stdout,"\n----------------------------------------------------------------------------------------------\n");
 
         }
         if(out_mode==F_CONCAT){

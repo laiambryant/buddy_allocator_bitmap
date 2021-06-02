@@ -1,8 +1,19 @@
+#pragma once
+#include "pool_allocator.h"
+#include "Bitmap.h" 
+#include <stdint.h>
+#include <math.h>
+#include <stdint.h>
+#include <assert.h>
+
 #define MAX_LEVELS 16
+#define DATA_MAX uint16_t
+
 
 // one entry of the buddy list
 typedef struct BuddyListItem {
-
+    DATA_MAX idx;
+    
 } BuddyListItem;
 
 
@@ -11,30 +22,26 @@ typedef struct  {
 } BuddyAllocator;
 
 
-// computes the size in bytes for the buffer of the allocator
-int BuddyAllocator_calcSize(int num_levels);
+DATA_MAX BuddyAllocator_calcSize(DATA_MAX num_levels);
 
-
-// initializes the buddy allocator, and checks that the buffer is large enough
 void BuddyAllocator_init(BuddyAllocator* alloc,
-                         int num_levels,
-                         char* buffer,
-                         int buffer_size,
-                         char* memory,
-                         int min_bucket_size);
+                         DATA_MAX num_levels,
+                         uint8_t* buffer,
+                         DATA_MAX buffer_size,
+                         uint8_t* memory,
+                         DATA_MAX min_bucket_size);
 
-// returns (allocates) a buddy at a given level.
-// side effect on the internal structures
-// 0 id no memory available
-BuddyListItem* BuddyAllocator_getBuddy(BuddyAllocator* alloc, int level);
+BuddyListItem* BuddyAllocator_getBuddy(BuddyAllocator* alloc, DATA_MAX level);
 
-
-// releases an allocated buddy, performing the necessary joins
-// side effect on the internal structures
 void BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, BuddyListItem* item);
 
-//allocates memory
-void* BuddyAllocator_malloc(BuddyAllocator* alloc, int size);
+void* BuddyAllocator_malloc(BuddyAllocator* alloc, DATA_MAX size);
 
-//releases allocated memory
 void BuddyAllocator_free(BuddyAllocator* alloc, void* mem);
+
+DATA_MAX level(DATA_MAX tree_node);
+DATA_MAX first_node_level(DATA_MAX tree_node);
+DATA_MAX node_level_offset(DATA_MAX tree_node);
+DATA_MAX buddy(DATA_MAX tree_node);
+DATA_MAX parent(DATA_MAX tree_node);
+
