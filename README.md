@@ -26,6 +26,10 @@ The docs will be structured in 4 parts:
   6. <code> make buddyDebugFull </code> runs <code> make buddyVG </code>, <code> make buddyGProf </code>, <code> make buddyDump </code>
     
   7. <code> make clean </code> removes executable, objects, precompiled headers and ouput of other tests.
+  
+  8. <code>BitmapTest</code> tests bitmap (main is in the /Tests dir)
+  
+  9. <code>BitmapVG</code> Compiles and runs bitmap test through valgrind(main is in the /Tests dir)
 
 
 ### Explaination of how the allocator works
