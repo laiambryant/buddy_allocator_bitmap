@@ -2,5 +2,22 @@
     "makefile.extensionOutputFolder": "./.vscode",
     "files.associations": {
         "buddy.h": "c"
-    }
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/liam/Documents/buddy_allocator_bitmap",
+            "binaryPath": "/home/liam/Documents/buddy_allocator_bitmap/Bud_test",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "home/liam/Documents/buddy_allocator_bitmap/OUT/Bins/",
+            "binaryPath": "home/liam/Documents/buddy_allocator_bitmap/OUT/Bins/Bud_test",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "home/liam/Documents/buddy_allocator_bitmap/OUT/Bins",
+            "binaryPath": "home/liam/Documents/buddy_allocator_bitmap/OUT/Bins/Bud_test",
+            "binaryArgs": []
+        }
+    ]
 }

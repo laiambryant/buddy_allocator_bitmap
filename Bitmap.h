@@ -32,6 +32,7 @@ typedef enum OUT_MODE{
 
 typedef struct BitMap{
     uint8_t *Buf; //Bitmap will be stored here
+    uint8_t *end_Buf;
     DATA_MAX buffer_size;
     DATA_MAX num_bits;
     DATA_MAX allocated_bits;

@@ -4,15 +4,14 @@
 
 
 #define BUF_SIZE 1024*8  // 1 KByte Bitmap
-#define DEBUG 1
 #define MEM_SIZE 1*(BUF_SIZE + sizeof(BitMap)) //Only 1 bitmap to save
 
 char memory[MEM_SIZE];
-
 uint8_t buffer[BUF_SIZE];
-PoolAllocator PAllocator;
 
 int main(int argc, char const *argv[]){
+
+	PoolAllocator PAllocator;
 
 	PoolAllocator_init(&PAllocator, sizeof(BitMap), 1, memory, MEM_SIZE);
 	BitMap *b = (BitMap*) PoolAllocator_getBlock(&PAllocator);
