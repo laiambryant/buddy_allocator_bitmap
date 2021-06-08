@@ -1,7 +1,11 @@
 #pragma once
 #include "Bitmap.h"
-#include <stdint.h>
+#include "pool_allocator.h"
 
+#include <assert.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <math.h>
 #define DATA_MAX uint16_t
 
 /*
@@ -33,22 +37,23 @@ typedef enum OUT_MODE{
 typedef struct BitMap{
     uint8_t *Buf; //Bitmap will be stored here
     uint8_t *end_Buf;
-    DATA_MAX buffer_size;
-    DATA_MAX num_bits;
-    DATA_MAX allocated_bits;
+    PoolAllocator pa;
+    size_t buffer_size;
+    size_t num_bits;
+    size_t allocated_bits;
 } BitMap;
 
 // returns the number of bytes to store bits booleans
-DATA_MAX BitMap_getBytes(DATA_MAX bits);
+int BitMap_getBytes(int bits);
 
 // initializes a bitmap on an external array
-void BitMap_init(BitMap *bit_map, DATA_MAX num_bits, uint8_t *buffer);
+void BitMap_init(BitMap *bit_map, int num_bits, uint8_t *buffer);
 
 // sets a the bit bit_num in the bitmap
 // status= 0 or 1
-void BitMap_setBit(BitMap *bit_map, DATA_MAX bit_num, Status status);
+void BitMap_setBit(BitMap *bit_map, int bit_num, Status status);
 
 // inspects the status of the bit bit_num
-Status BitMap_bit( BitMap *bit_map, DATA_MAX bit_num);
+Status BitMap_bit( BitMap *bit_map, int bit_num);
 
 void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode);

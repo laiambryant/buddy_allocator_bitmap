@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
- 
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed Jun  2 15:54:42 2021
+# Make data base, printed on Tue Jun  8 17:57:43 2021
 
 # Variables
 
@@ -51,7 +49,7 @@ SNAP_DATA = /var/snap/code/65
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
-JOURNAL_STREAM = 8:51798
+JOURNAL_STREAM = 8:57457
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # environment
@@ -81,7 +79,7 @@ _ = /snap/code/65/usr/share/code/code
 # makefile (from 'makefile', line 2)
 VGOPTS = --leak-check=full --show-leak-kinds=all  --track-origins=yes  --verbose 
 # environment
-MANAGERPID = 1243
+MANAGERPID = 1231
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
@@ -97,7 +95,7 @@ PATH = /home/liam/.local/bin:/home/liam/.local/bin:/usr/local/sbin:/usr/local/bi
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/liam-desktop:@/tmp/.ICE-unix/1513,unix/liam-desktop:/tmp/.ICE-unix/1513
+SESSION_MANAGER = local/liam-desktop:@/tmp/.ICE-unix/1500,unix/liam-desktop:/tmp/.ICE-unix/1500
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -119,7 +117,7 @@ DISABLE_WAYLAND = 1
 # environment
 VSCODE_CRASH_REPORTER_START_OPTIONS = {"companyName":"Microsoft","productName":"VSCode","submitURL":"appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=405981d7-7171-4b3d-8047-52faa804df52&iid=405981d7-7171-4b3d-8047-52faa804df52&sid=405981d7-7171-4b3d-8047-52faa804df52","uploadToServer":true}
 # environment
-INVOCATION_ID = c10f6077c04f4890a4d329afce929525
+INVOCATION_ID = 000c626d98174ad998326c94e419040c
 # environment
 GDK_PIXBUF_MODULEDIR = /snap/code/65/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # default
@@ -131,7 +129,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 32549
+GIO_LAUNCHED_DESKTOP_FILE_PID = 3765
 # automatic
 %F = $(notdir $%)
 # environment
@@ -145,9 +143,9 @@ PWD = /home/liam/Documents/buddy_allocator_bitmap
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 1464
+SSH_AGENT_PID = 1456
 # environment
-ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
+ORIGINAL_XDG_CURRENT_DESKTOP = Unity
 # makefile (from 'makefile', line 9)
 BINS_DIR = OUT/Bins/
 # environment
@@ -203,7 +201,7 @@ CC = gcc
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-7f8b4015-aa8a-4217-8914-6c918856ffd0.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-2bfdab4c-8582-4d6b-9b6c-9bc210982a9d.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -280,7 +278,6 @@ GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 LIBS = -lm
 # automatic
 ^F = $(notdir $^)
- 
 # default
 SUFFIXES := 
 # environment
@@ -290,6 +287,9 @@ CHROME_DESKTOP = code-url-handler.desktop
 # environment
 WINDOWPATH = 2
 # default
+ 
+make: *** No rule to make target 'all'.  Stop.
+ 
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
 # environment
 GJS_DEBUG_OUTPUT = stderr
@@ -300,7 +300,7 @@ LC_ADDRESS = it_IT.UTF-8
 # environment
 LANG = C
 # environment
-VSCODE_PID = 32593
+VSCODE_PID = 10653
 # variable set hash-table stats:
 # Load=144/1024=14%, Rehash=0, Collisions=28/169=17%
 
@@ -310,9 +310,9 @@ VSCODE_PID = 32593
 
 # Directories
 
-# . (device 2066, inode 11928695): 15 files, no impossibilities.
+# . (device 2066, inode 11928695): 18 files, no impossibilities.
 
-# 15 files, no impossibilities in 1 directories.
+# 18 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -325,7 +325,7 @@ BitmapTest:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 44):
-	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* pool_allocator.*
+	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* pool_allocator.* Buddy.* $(LIBS)
 	./BM_test
 	mv BM_test $(BINS_DIR)
 
@@ -344,7 +344,7 @@ buddyDebugFull: buddyGProf buddyVG buddyDump
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-02 15:53:22.538090841
+#  Last modified 2021-06-08 14:24:52.502651617
 #  File has been updated.
 #  Successfully updated.
 
@@ -353,14 +353,14 @@ buddy.o:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 22):
-	$(CC) $(CCOPTS) $(CC_DUMP) Main.c Bitmap.*  BuddyAllocator.* pool_allocator.* $(LIBS)
+	$(CC) $(CCOPTS) $(CC_DUMP) Main.c Bitmap.*  BuddyAllocator.* pool_allocator.* Buddy.* $(LIBS)
 
 buddy:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 16):
-	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.* BuddyAllocator.* pool_allocator.* $(LIBS)
+	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.* BuddyAllocator.* pool_allocator.* Buddy.* $(LIBS)
 	./Bud_test
 	mv Bud_test $(BINS_DIR)
 
@@ -382,7 +382,7 @@ buddyDump: buddy.o
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 38):
-	objdump -d Bitmap.o > Bitmap_dump.txt Buddy.o > Buddy_dump.txt Main.o > Main_dump.txt
+	objdump -d Bitmap.o > Bitmap_dump.txt Buddy.o > Buddy_dump.txt Main.o > Main_dump.txt Buddy.o>Buddy_dump.txt
 	mv *.txt $(DUMPS_DIR)
 
 BitmapVG:
@@ -390,18 +390,17 @@ BitmapVG:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 49):
-	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* pool_allocator.*
+	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* pool_allocator.* Buddy.* $(LIBS)
 	valgrind $(VGOPTS)--log-file=bm-valgrind-out.txt \./BM_test
 	mv bm-valgrind-out.txt $(OUT_DIR)
 	rm -rf gmon.out BM_test
 
 buddyVG:
 #  Implicit rule search has not been done.
- 
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 25):
-	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.*  BuddyAllocator.* pool_allocator.* $(LIBS)
+	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.*  BuddyAllocator.* pool_allocator.* Buddy.* $(LIBS)
 	valgrind $(VGOPTS)--log-file=bud-valgrind-out.txt \./Bud_test
 	mv bud-valgrind-out.txt $(OUT_DIR)
 	rm -rf gmon.out Bud_test
@@ -411,7 +410,7 @@ buddyGProf:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 31):
-	$(CC) $(CCOPTS) $(CC_GPROF) -o Bud_test Main.c Bitmap.* * BuddyAllocator.* pool_allocator.* $(LIBS)
+	$(CC) $(CCOPTS) $(CC_GPROF) -o Bud_test Main.c Bitmap.* * BuddyAllocator.* pool_allocator.* Buddy.* $(LIBS)
 	./Bud_test
 	gprof Bud_test gmon.out > Bud_TestGprof.txt
 	mv Bud_TestGprof.txt $(OUT_DIR)
@@ -425,12 +424,12 @@ buddyGProf:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 29 / storage = 279 B / avg = 9 B
-# current buf: size = 8162 B / used = 279 B / count = 29 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 32 / storage = 304 B / avg = 9 B
+# current buf: size = 8162 B / used = 304 B / count = 32 / avg = 9 B
 
-# strcache performance: lookups = 46 / hit rate = 36%
+# strcache performance: lookups = 49 / hit rate = 34%
 # hash-table stats:
-# Load=29/8192=0%, Rehash=0, Collisions=1/46=2%
-# Finished Make data base on Wed Jun  2 15:54:42 2021
+# Load=32/8192=0%, Rehash=0, Collisions=1/49=2%
+# Finished Make data base on Tue Jun  8 17:57:43 2021
 
  

@@ -1,7 +1,7 @@
 #include "pool_allocator.h"
 
-static const int NullIdx=-1;
-static const int DetachedIdx=-2;
+static const int NullIdx=1;
+static const int DetachedIdx=2;
 
 static const char* PoolAllocator_strerrors[]=
   {"Success",
@@ -17,10 +17,10 @@ const char* PoolAllocator_strerror(PoolAllocatorResult result) {
 }
 
 PoolAllocatorResult PoolAllocator_init(PoolAllocator* a,
-		       int item_size,
+		       size_t item_size,
 		       int num_items,
-		       char* memory_block,
-		       int memory_size) {
+		       uint8_t* memory_block,
+		       size_t memory_size) {
 
   // we first check if we have enough memory
   // for the bookkeeping
@@ -60,13 +60,13 @@ void* PoolAllocator_getBlock(PoolAllocator* a) {
   a->free_list[detached_idx]=DetachedIdx;
   
   //now we retrieve the pointer in the item buffer
-  char* block_address=a->buffer+(detached_idx*a->item_size);
+  uint8_t* block_address=a->buffer+(detached_idx*a->item_size);
   return block_address;
 }
 
 PoolAllocatorResult PoolAllocator_releaseBlock(PoolAllocator* a, void* block_){
   //we need to find the index from the address
-  char* block=(char*) block_;
+  uint8_t* block=(uint8_t*) block_;
   int offset=block - a->buffer;
 
   //sanity check, we need to be aligned to the block boundaries

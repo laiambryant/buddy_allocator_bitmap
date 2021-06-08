@@ -6,7 +6,7 @@
 #define BUF_SIZE 1024*8  // 1 KByte Bitmap
 #define MEM_SIZE 1*(BUF_SIZE + sizeof(BitMap)) //Only 1 bitmap to save
 
-char memory[MEM_SIZE];
+uint8_t memory[MEM_SIZE];
 uint8_t buffer[BUF_SIZE];
 
 int main(int argc, char const *argv[]){
@@ -29,5 +29,7 @@ int main(int argc, char const *argv[]){
 	Bitmap_print(b,F_CONCAT);
 
 	PoolAllocator_releaseBlock(&PAllocator, b);
+
+
 	return 0;
 }

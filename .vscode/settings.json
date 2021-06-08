@@ -1,7 +1,9 @@
 {
     "makefile.extensionOutputFolder": "./.vscode",
     "files.associations": {
-        "buddy.h": "c"
+        "buddy.h": "c",
+        "buddyallocator.h": "c",
+        "stdio.h": "c"
     },
     "makefile.launchConfigurations": [
         {
