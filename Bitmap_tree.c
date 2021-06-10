@@ -24,11 +24,52 @@ DATA_MAX tree_getparent(DATA_MAX idx){
     return (uint16_t)idx/2;
 }
 
-void tree_print(BitMap_tree *tree){
-    for (int i = 0; i < tree->levels; i++){
-		for (int j = 0; j < pow(2,i);j++){
-		    printf("%d",BitMap_bit(tree->BitMap,pow(2,i)+j));
+void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
+    if(out_mode==F_WRITE){
+        FILE* f = fopen("OUT/bitmap.txt", "w");
+        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
+        fprintf(f, "Bitmap Metadata:\n ");
+        fprintf(f, "%d bits\t%d bytes\n", tree->BitMap->num_bits, tree->BitMap->buffer_size);
+        fprintf(f, "%p start\t%p end\n", tree->BitMap->Buf, tree->BitMap->end_Buf);
+        fprintf(f, "Bitmap STATUS:\n ");
+        for (int i = 0; i < tree->levels; i++){
+		    for (int j = 0; j < pow(2,i);j++){
+			    fprintf(f, "%x",BitMap_bit(tree->BitMap,pow(2,i)+j));
+		    }
+		fprintf(f,"\n");
 	    }
-		printf("\n");
-	}
+        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
+        fclose(f);
+    }
+    if(out_mode==STDOUT){
+        fprintf(stdout, "\n----------------------------------------------------------------------------------------------\n");
+        fprintf(stdout,"Bitmap Metadata:\n "); 
+        fprintf(stdout,"%d bits\t%d bytes\n",tree->BitMap->num_bits, tree->BitMap->buffer_size);
+        fprintf(stdout, "%p start\t%p end\n", tree->BitMap->Buf, tree->BitMap->end_Buf);
+        fprintf(stdout,"Bitmap STATUS:\n ");
+        for (int i = 0; i < tree->levels; i++){
+		    for (int j = 0; j < pow(2,i);j++){
+			    fprintf(stdout, "%x",BitMap_bit(tree->BitMap,pow(2,i)+j));
+		    }
+		fprintf(stdout,"\n");
+	    }
+        fprintf(stdout,"\n----------------------------------------------------------------------------------------------\n");
+    }
+    if(out_mode==F_CONCAT){
+        FILE* f = fopen("OUT/bitmap.txt", "a");
+        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
+        fprintf(f, "Bitmap Metadata:\n ");
+        fprintf(f, "%d bits\t%d bytes\n",  tree->BitMap->num_bits, tree->BitMap->buffer_size);
+        fprintf(f, "%p start\t%p end\n", tree->BitMap->Buf, tree->BitMap->end_Buf);
+        fprintf(f, "Bitmap STATUS:\n ");
+        for (int i = 0; i < tree->levels; i++){
+		    for (int j = 0; j < pow(2,i);j++){
+			    fprintf(f,"%x",BitMap_bit(tree->BitMap,(pow(2,i)+j)-1));
+		    }
+		fprintf(f,"\n");
+	    }
+        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
+        fclose(f);
+    }
 }
+

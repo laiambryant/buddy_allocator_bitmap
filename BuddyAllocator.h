@@ -14,7 +14,7 @@ typedef struct  BuddyAllocator{
     DATA_MAX buffer_size;
     DATA_MAX min_bucket_size;
     DATA_MAX num_items;
-    BitMap_tree* bitmap;
+    BitMap_tree* tree;
     PoolAllocator *p_alloc;
     uint8_t* memory;
 } BuddyAllocator;
@@ -23,9 +23,9 @@ typedef struct  BuddyAllocator{
 uint32_t BuddyAllocator_calcSize(uint32_t num_levels);
 void BuddyAllocator_init(
                     BitMap_tree* b,
-                    BuddyAllocator* alloc,
-                    DATA_MAX num_levels,
+                    BuddyAllocator* b_alloc,
                     uint8_t* buffer,
+                    DATA_MAX num_levels,
                     DATA_MAX buffer_size,
                     DATA_MAX min_bucket_size);
 

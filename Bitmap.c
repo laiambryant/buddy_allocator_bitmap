@@ -46,7 +46,7 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
             fprintf(f, "%d bits\t%d bytes\n", bit_map->num_bits, bit_map->buffer_size);
             fprintf(f, "%p start\t%p end\n", bit_map->Buf, bit_map->end_Buf);
             fprintf(f, "Bitmap STATUS:\n ");
-            for(DATA_MAX i=0; i<bit_map->num_bits; i++){
+            for(int i=0; i<bit_map->num_bits; i++){
                 fprintf(f, "%x", BitMap_bit(bit_map, i));  
             }
             fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
@@ -58,7 +58,7 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
             fprintf(stdout,"%d bits\t%d bytes\n",bit_map->num_bits, bit_map->buffer_size);
             fprintf(stdout, "%p start\t%p end\n", bit_map->Buf, bit_map->end_Buf);
             fprintf(stdout,"Bitmap STATUS:\n ");
-            for(DATA_MAX i=0; i<bit_map->num_bits; i++){
+            for(int i=0; i<bit_map->num_bits; i++){
                 fprintf(stdout, "%x", BitMap_bit(bit_map, i));
             }
             fprintf(stdout,"\n----------------------------------------------------------------------------------------------\n");
@@ -71,7 +71,7 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
             fprintf(f, "%d bits\t%d bytes\n",  bit_map->num_bits, bit_map->buffer_size);
             fprintf(f, "%p start\t%p end\n", bit_map->Buf, bit_map->end_Buf);
             fprintf(f, "Bitmap STATUS:\n ");
-            for(DATA_MAX i=0; i<bit_map->num_bits; i++){
+            for(int i=0; i<bit_map->num_bits; i++){
                 fprintf(f, "%x", BitMap_bit(bit_map, i));
             }
             fprintf(f, "\n----------------------------------------------------------------------------------------------\n");

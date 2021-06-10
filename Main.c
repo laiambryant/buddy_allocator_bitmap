@@ -1,7 +1,7 @@
 #include "BuddyAllocator.h"
 
 #define MAX_LEVELS 16
-
+#define LEVELS 13
 //Buffer for bitmap
 #define BM_BUF_SIZE 64*1024*8  // 64 KByte Bitmap
 #define BM_SIZE 1*(BM_BUF_SIZE + sizeof(BitMap)) //Only 1 bitmap to save
@@ -19,11 +19,12 @@ int main(int argc, char const *argv[])
 	PoolAllocator_init(&PAllocator, sizeof(BitMap), 1, BM_memory, BM_SIZE);
 	BitMap *b = (BitMap*) PoolAllocator_getBlock(&PAllocator);
 	BitMap_init(b, BM_BUF_SIZE, BM_buffer);
+    BitMap_tree tree = {b, LEVELS};
 
     BuddyAllocator BAllocator;
-    BuddyAllocator_init(b, &BAllocator, MAX_LEVELS, BA_buffer, BALLOC_BUFF_SIZE, BM_SIZE/(pow(2, MAX_LEVELS)));
+    BuddyAllocator_init(&tree, &BAllocator, BA_buffer, MAX_LEVELS, BALLOC_BUFF_SIZE, BM_SIZE/(pow(2, MAX_LEVELS)));
 
-    Bitmap_print(BAllocator.bitmap, 1);
+    Bitmap_print(BAllocator.tree->BitMap, F_WRITE);
 
     PoolAllocator_releaseBlock(&PAllocator, b);
     return 0;
