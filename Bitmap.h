@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <math.h>
-#define DATA_MAX uint16_t
+#define DATA_MAX uint32_t
 
 /*
     Bitmap will work as following. Each time the buddy allocator creates the nodes of the tree the size of the bitmap will double.
@@ -24,8 +24,8 @@
 
 //Enum for bit status to avoid values != [0,1]
 typedef enum Status{
-    ALLOCATED = 1,
-    FREE = 0
+    ALLOCATED = 0x01,
+    FREE = 0x00
 }Status;
 
 typedef enum OUT_MODE{
@@ -37,23 +37,22 @@ typedef enum OUT_MODE{
 typedef struct BitMap{
     uint8_t *Buf; //Bitmap will be stored here
     uint8_t *end_Buf;
-    PoolAllocator pa;
-    size_t buffer_size;
-    size_t num_bits;
-    size_t allocated_bits;
+    DATA_MAX buffer_size;
+    DATA_MAX num_bits;
+    DATA_MAX allocated_bits;
 } BitMap;
 
 // returns the number of bytes to store bits booleans
-int BitMap_getBytes(int bits);
+DATA_MAX BitMap_getBytes(DATA_MAX bits);
 
 // initializes a bitmap on an external array
-void BitMap_init(BitMap *bit_map, int num_bits, uint8_t *buffer);
+void BitMap_init(BitMap *bit_map,  DATA_MAX num_bits, uint8_t *buffer);
 
 // sets a the bit bit_num in the bitmap
 // status= 0 or 1
-void BitMap_setBit(BitMap *bit_map, int bit_num, Status status);
+void BitMap_setBit(BitMap *bit_map,  DATA_MAX bit_num, Status status);
 
 // inspects the status of the bit bit_num
-Status BitMap_bit( BitMap *bit_map, int bit_num);
+uint8_t BitMap_bit( BitMap *bit_map,  DATA_MAX bit_num);
 
 void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode);
