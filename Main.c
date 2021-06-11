@@ -14,13 +14,14 @@ uint8_t BA_buffer[BALLOC_BUFF_SIZE];
 
 int main(int argc, char const *argv[])
 {
+    //Initializes Pool allocator for bitmap and bitmap to store the tree
     PoolAllocator PAllocator;
-
 	PoolAllocator_init(&PAllocator, sizeof(BitMap), 1, BM_memory, BM_SIZE);
-	BitMap *b = (BitMap*) PoolAllocator_getBlock(&PAllocator);
+    BitMap *b = (BitMap*) PoolAllocator_getBlock(&PAllocator);
 	BitMap_init(b, BM_BUF_SIZE, BM_buffer);
     BitMap_tree tree = {b, LEVELS};
 
+    //Initializes Buddy ALlocator
     BuddyAllocator BAllocator;
     BuddyAllocator_init(&tree, &BAllocator, BA_buffer, MAX_LEVELS, BALLOC_BUFF_SIZE, BM_SIZE/(pow(2, MAX_LEVELS)));
 

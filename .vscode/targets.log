@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
- 
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun 10 12:22:12 2021
+# Make data base, printed on Fri Jun 11 10:37:44 2021
 
 # Variables
 
@@ -51,7 +49,7 @@ SNAP_DATA = /var/snap/code/65
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
-JOURNAL_STREAM = 8:55376
+JOURNAL_STREAM = 8:52978
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # environment
@@ -81,7 +79,7 @@ _ = /snap/code/65/usr/share/code/code
 # makefile (from 'makefile', line 2)
 VGOPTS = --leak-check=full --show-leak-kinds=all  --track-origins=yes  --verbose 
 # environment
-MANAGERPID = 1238
+MANAGERPID = 1293
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
@@ -97,7 +95,7 @@ PATH = /home/liam/.local/bin:/home/liam/.local/bin:/usr/local/sbin:/usr/local/bi
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/liam-desktop:@/tmp/.ICE-unix/1512,unix/liam-desktop:/tmp/.ICE-unix/1512
+SESSION_MANAGER = local/liam-desktop:@/tmp/.ICE-unix/1580,unix/liam-desktop:/tmp/.ICE-unix/1580
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -119,7 +117,7 @@ DISABLE_WAYLAND = 1
 # environment
 VSCODE_CRASH_REPORTER_START_OPTIONS = {"companyName":"Microsoft","productName":"VSCode","submitURL":"appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=405981d7-7171-4b3d-8047-52faa804df52&iid=405981d7-7171-4b3d-8047-52faa804df52&sid=405981d7-7171-4b3d-8047-52faa804df52","uploadToServer":true}
 # environment
-INVOCATION_ID = 1fa5296af62046eea3a2691f8a7f20e0
+INVOCATION_ID = 5f89a4274b1f416fb86716e78b3122e2
 # environment
 GDK_PIXBUF_MODULEDIR = /snap/code/65/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # default
@@ -131,7 +129,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 14707
+GIO_LAUNCHED_DESKTOP_FILE_PID = 3218
 # automatic
 %F = $(notdir $%)
 # environment
@@ -145,7 +143,7 @@ PWD = /home/liam/Documents/buddy_allocator_bitmap
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 1469
+SSH_AGENT_PID = 1517
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # makefile (from 'makefile', line 9)
@@ -203,7 +201,7 @@ CC = gcc
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-a1756210-01d3-4389-bb0e-9d9cde74b91e.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-ba41e99c-385a-4b60-8494-ff71ace3480d.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -287,6 +285,9 @@ SNAP_REEXEC =
 # environment
 CHROME_DESKTOP = code-url-handler.desktop
 # environment
+ 
+make: *** No rule to make target 'all'.  Stop.
+ 
 WINDOWPATH = 2
 # default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
@@ -299,9 +300,8 @@ LC_ADDRESS = it_IT.UTF-8
 # environment
 LANG = C
 # environment
-VSCODE_PID = 14751
+VSCODE_PID = 3262
 # variable set hash-table stats:
- 
 # Load=144/1024=14%, Rehash=0, Collisions=28/169=17%
 
 # Pattern-specific Variable Values
@@ -430,6 +430,6 @@ buddyGProf:
 # strcache performance: lookups = 48 / hit rate = 35%
 # hash-table stats:
 # Load=31/8192=0%, Rehash=0, Collisions=1/48=2%
-# Finished Make data base on Thu Jun 10 12:22:12 2021
+# Finished Make data base on Fri Jun 11 10:37:44 2021
 
  

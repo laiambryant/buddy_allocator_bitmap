@@ -24,6 +24,10 @@ DATA_MAX tree_getparent(DATA_MAX idx){
     return (uint16_t)idx/2;
 }
 
+uint8_t tree_buddiesOnLevel(BitMap_tree *tree, DATA_MAX level){
+
+}
+
 void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
     if(out_mode==F_WRITE){
         FILE* f = fopen("OUT/bitmap.txt", "w");
