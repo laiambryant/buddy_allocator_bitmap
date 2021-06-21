@@ -78,11 +78,22 @@ void BuddyAllocator_destroyItem(BuddyAllocator* b_alloc, Buddy_item* item){
 Buddy_item* BuddyAllocator_getBuddy(BuddyAllocator* b_alloc, DATA_MAX level){
     if(level<0) return 0;
     assert(level<=b_alloc->num_levels);
+    //Checks if there are buddies on the level, if not calls the same function on previous level
     if(!tree_buddiesOnLevel(b_alloc->tree, level)){
         Buddy_item* parent = BuddyAllocator_getBuddy(b_alloc, level-1);
         if(!parent) return 0;
+
+        //If parent is already free
+        DATA_MAX left_idx = parent->idx<<1; DATA_MAX right_idx = parent->idx+1;
+
+        Buddy_item* left_ptr=BuddyAllocator_createItem(b_alloc, left_idx);
+        Buddy_item* right_ptr=BuddyAllocator_createItem(b_alloc, right_idx);
     }
-    
+    if(tree_buddiesOnLevel(b_alloc->tree, level)){
+        DATA_MAX idx = tree_first_free_node_level(b_alloc->tree, level);
+        return (Buddy_item*)b_alloc->memory[idx];
+    }
+    assert(0);return(0);
 }
 
 void BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, DATA_MAX idx){

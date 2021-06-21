@@ -37,12 +37,10 @@ int main(int argc, char const *argv[]){
 	tree_print(&tree, F_CONCAT);
 
 	for(uint32_t j = 0; j<BUF_SIZE; j++){
-		if(j%2)BitMap_setBit(b, j, FREE);
+		if(!(j%2))BitMap_setBit(b, j, FREE);
 		else BitMap_setBit(b, j, ALLOCATED);
 	}
 	tree_print(&tree, F_CONCAT);
-	Bitmap_print(b,F_CONCAT);
-
 
 	PoolAllocator_releaseBlock(&PAllocator, b);
 

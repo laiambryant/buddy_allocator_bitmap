@@ -1,7 +1,0 @@
-	Bitmap Address: 0x55f689b27080
-	Buddy Allocator levels: 16
-	Buddy Allocator items: 131072
-	Buddy Allocator min bucket size: 2048
-	Mem alloc size: 16777216
-	Mem address start: 0x55f689c270a0
-	Mem address end: 0x55f68ac270a0
