@@ -13,7 +13,7 @@ DATA_MAX tree_first_node_level(DATA_MAX idx){
 }
 DATA_MAX tree_first_free_node_level(BitMap_tree* tree,DATA_MAX level){
     for(DATA_MAX i=pow(2, level+1)-1;i>0;i--){
-        //TODO
+        if(!BitMap_bit(tree->BitMap, i)) return i;
     }
     return 0;
 }
@@ -29,11 +29,15 @@ DATA_MAX tree_getparent(DATA_MAX idx){
 }
 
 DATA_MAX tree_buddiesOnLevel(BitMap_tree *tree, DATA_MAX level){
-    DATA_MAX start_idx = pow(2, level-1)+1;
-    DATA_MAX end_idx = pow(2, level);
+    if(level == 0){
+        if (BitMap_bit(tree->BitMap, 0)) return 1;
+        else return 0;
+    }
+    DATA_MAX start_idx = pow(2, level);
+    DATA_MAX end_idx = pow(2, level+1)-1;
     DATA_MAX ret = 0;
     for(int i = start_idx; i<=end_idx; i++){
-        //TODO
+        if(BitMap_bit(tree->BitMap, i))ret++;
     }
     return ret;
 }

@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
- 
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Jun 21 11:17:17 2021
+# Make data base, printed on Thu Jun 24 10:44:21 2021
 
 # Variables
 
@@ -51,7 +49,7 @@ SNAP_DATA = /var/snap/code/67
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
-JOURNAL_STREAM = 8:56969
+JOURNAL_STREAM = 8:52211
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # environment
@@ -81,7 +79,7 @@ _ = /snap/code/67/usr/share/code/code
 # makefile (from 'makefile', line 2)
 VGOPTS = --leak-check=full --show-leak-kinds=all  --track-origins=yes  --verbose 
 # environment
-MANAGERPID = 1236
+MANAGERPID = 1275
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
@@ -97,7 +95,7 @@ PATH = /home/liam/.local/bin:/home/liam/.local/bin:/usr/local/sbin:/usr/local/bi
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/liam-desktop:@/tmp/.ICE-unix/1526,unix/liam-desktop:/tmp/.ICE-unix/1526
+SESSION_MANAGER = local/liam-desktop:@/tmp/.ICE-unix/1560,unix/liam-desktop:/tmp/.ICE-unix/1560
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -119,7 +117,7 @@ DISABLE_WAYLAND = 1
 # environment
 VSCODE_CRASH_REPORTER_START_OPTIONS = {"companyName":"Microsoft","productName":"VSCode","submitURL":"appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=405981d7-7171-4b3d-8047-52faa804df52&iid=405981d7-7171-4b3d-8047-52faa804df52&sid=405981d7-7171-4b3d-8047-52faa804df52","uploadToServer":true}
 # environment
-INVOCATION_ID = ad4c119325db49ecbd44c8efa15e4054
+INVOCATION_ID = 8593200b0ccc4b09ba736826df415ca5
 # environment
 GDK_PIXBUF_MODULEDIR = /snap/code/67/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # default
@@ -131,7 +129,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 18767
+GIO_LAUNCHED_DESKTOP_FILE_PID = 11004
 # automatic
 %F = $(notdir $%)
 # environment
@@ -145,7 +143,7 @@ PWD = /home/liam/Documents/buddy_allocator_bitmap
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 1465
+SSH_AGENT_PID = 1495
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # makefile (from 'makefile', line 9)
@@ -203,7 +201,7 @@ CC = gcc
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-780c6be6-5e08-4a84-a12f-d749aed50f3c.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-d767fd20-5b50-42f2-813f-7c57042a0346.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -279,6 +277,9 @@ GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # makefile (from 'makefile', line 3)
 LIBS = -lm
 # automatic
+ 
+make: *** No rule to make target 'all'.  Stop.
+ 
 ^F = $(notdir $^)
 # default
 SUFFIXES := 
@@ -292,7 +293,6 @@ WINDOWPATH = 2
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
 # environment
 GJS_DEBUG_OUTPUT = stderr
- 
 # default
 .RECIPEPREFIX := 
 # environment
@@ -300,7 +300,7 @@ LC_ADDRESS = it_IT.UTF-8
 # environment
 LANG = C
 # environment
-VSCODE_PID = 18811
+VSCODE_PID = 11050
 # variable set hash-table stats:
 # Load=144/1024=14%, Rehash=0, Collisions=28/169=17%
 
@@ -310,9 +310,9 @@ VSCODE_PID = 18811
 
 # Directories
 
-# . (device 2066, inode 11928695): 17 files, no impossibilities.
+# . (device 2066, inode 11928695): 18 files, no impossibilities.
 
-# 17 files, no impossibilities in 1 directories.
+# 18 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -424,12 +424,12 @@ buddyGProf:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 31 / storage = 307 B / avg = 9 B
-# current buf: size = 8162 B / used = 307 B / count = 31 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 32 / storage = 315 B / avg = 9 B
+# current buf: size = 8162 B / used = 315 B / count = 32 / avg = 9 B
 
-# strcache performance: lookups = 48 / hit rate = 35%
+# strcache performance: lookups = 49 / hit rate = 34%
 # hash-table stats:
-# Load=31/8192=0%, Rehash=0, Collisions=1/48=2%
-# Finished Make data base on Mon Jun 21 11:17:17 2021
+# Load=32/8192=0%, Rehash=0, Collisions=1/49=2%
+# Finished Make data base on Thu Jun 24 10:44:21 2021
 
  
