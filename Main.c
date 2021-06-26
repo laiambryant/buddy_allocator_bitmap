@@ -1,32 +1,42 @@
 #include "BuddyAllocator.h"
+#include <string.h>
 
-#define MAX_LEVELS 16
-#define LEVELS 13
+#define LEVELS 9
 //Buffer for bitmap
-#define BM_BUF_SIZE 64*1024*8  // 64 KByte Bitmap
+#define BM_BUF_SIZE 1024*100 // 100 Kbit Bitmap
 #define BM_SIZE 1*(BM_BUF_SIZE + sizeof(BitMap)) //Only 1 bitmap to save
-uint8_t BM_memory[BM_SIZE];
 uint8_t BM_buffer[BM_BUF_SIZE];
 
 //Buffer for Buddy allocator
-#define BALLOC_BUFF_SIZE 2*1024*1024*8 //2MB Memory Idxable
-uint8_t BA_buffer[BALLOC_BUFF_SIZE];
+#define BALLOC_MEM_SIZE 1024*1024 //1Mbit Memory Idxable
+uint8_t BA_memory[BALLOC_MEM_SIZE];
+
+BuddyAllocator BAllocator;
 
 int main(int argc, char const *argv[])
 {
     //Initializes Pool allocator for bitmap and bitmap to store the tree
-    PoolAllocator PAllocator;
-	PoolAllocator_init(&PAllocator, sizeof(BitMap), 1, BM_memory, BM_SIZE);
-    BitMap *b = (BitMap*) PoolAllocator_getBlock(&PAllocator);
+    PoolAllocator BM_PAllocator; 
+    memset(BM_buffer, 0, BM_BUF_SIZE);
+	PoolAllocatorResult res1 = PoolAllocator_init(
+        &BM_PAllocator, 
+        sizeof(BitMap), 
+        1, 
+        BM_buffer, 
+        BM_SIZE); 
+    assert(res1 == Success);
+    BitMap *b = (BitMap*) PoolAllocator_getBlock(&BM_PAllocator);
 	BitMap_init(b, BM_BUF_SIZE, BM_buffer);
     BitMap_tree tree = {b, LEVELS};
 
-    //Initializes Buddy ALlocator
-    BuddyAllocator BAllocator;
-    BuddyAllocator_init(&tree, &BAllocator, BA_buffer, MAX_LEVELS, BALLOC_BUFF_SIZE, BM_SIZE/(pow(2, MAX_LEVELS)));
+    memset(BA_memory, 0, BALLOC_MEM_SIZE);
 
-    Bitmap_print(BAllocator.tree->BitMap, F_WRITE);
+    tree_print(&tree, F_CONCAT);
 
-    PoolAllocator_releaseBlock(&PAllocator, b);
+    printf("Min Bucket size: %d\t Num items: %d\n", BuddyAllocator_calcMinBucketSize(BALLOC_MEM_SIZE, LEVELS), (uint32_t)pow(2,LEVELS));
+
+    BuddyAllocator_init(&tree, &BAllocator, BM_buffer,  BA_memory, BALLOC_MEM_SIZE, LEVELS);
+
+    PoolAllocator_releaseBlock(&BM_PAllocator, b);
     return 0;
 }

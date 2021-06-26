@@ -19,7 +19,7 @@ typedef struct Buddy_item{
     DATA_MAX buddy_idx;
     DATA_MAX size;
     DATA_MAX level
-} Buddy_item;
+}Buddy_item;
 
 
 DATA_MAX tree_get_idx(Buddy_item *bud);
