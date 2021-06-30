@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <math.h>
-#define DATA_MAX uint32_t
+#define DATA_MAX int
 
 /*
     Bitmap will work as following. Each time the buddy allocator creates the nodes of the tree the size of the bitmap will double.

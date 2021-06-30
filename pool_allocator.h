@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#define DATA_MAX int
+
 typedef enum {
   Success=0x0,
   NotEnoughMemory=1,

@@ -24,8 +24,9 @@ buddy.o:
 buddyVG:
 	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.*  BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
 	valgrind $(VGOPTS)--log-file=bud-valgrind-out.txt \./Bud_test
-	mv bud-valgrind-out.txt $(OUT_DIR)
-	rm -rf gmon.out Bud_test
+	mv bud-valgrind-out.txt  $(OUT_DIR)
+	mv Bud_test $(BINS_DIR)
+	rm -rf gmon.out 
 
 buddyGProf:
 	$(CC) $(CCOPTS) $(CC_GPROF) -o Bud_test Main.c Bitmap.* * BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
@@ -48,8 +49,9 @@ BitmapTest:
 BitmapVG:
 	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* pool_allocator.* Bitmap_tree.* $(LIBS)
 	valgrind $(VGOPTS)--log-file=bm-valgrind-out.txt \./BM_test
-	mv bm-valgrind-out.txt $(OUT_DIR)
-	rm -rf gmon.out BM_test
+	mv bm-valgrind-out.txt  $(OUT_DIR)
+	mv BM_test $(BINS_DIR)
+	rm -rf gmon.out
 
 clean:
 	rm -rf *.o Bud_test *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS)

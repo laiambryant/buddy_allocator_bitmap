@@ -1,4 +1,5 @@
 #include "pool_allocator.h"
+#define DEBUG 0
 
 static const int NullIdx=1;
 static const int DetachedIdx=2;
@@ -39,10 +40,22 @@ PoolAllocatorResult PoolAllocator_init(PoolAllocator* a,
   // now we populate the free list by constructing a linked list
   for (int i=0; i<a->size-1; ++i){
     a->free_list[i]=i+1;
+    
   }
   // set the last element to "NULL" 
   a->free_list[a->size-1] = NullIdx;
   a->first_idx=0;
+  if (DEBUG){
+    fprintf(stdout, "\n----------------------------------------------------------------------------------------------\n");
+    printf("Initializing Pallocator...\n");
+    printf("Pallocator addr %p\n", a);
+    printf("Item size: %d\n", a->item_size);
+    printf("Items: %d\n", a->size);
+    printf("Mem Block addr: %p\n", a->buffer);
+    printf("Free list addr: %p\n", a->free_list);
+    printf("Buffer size: %d\n", a->buffer_size);
+    fprintf(stdout, "\n----------------------------------------------------------------------------------------------\n");
+  }
   return Success;
 }
 
@@ -51,7 +64,6 @@ void* PoolAllocator_getBlock(PoolAllocator* a) {
     return 0;
 
   // we need to remove the first bucket from the list
-
   int detached_idx = a->first_idx;
   // advance the head
   a->first_idx=a->free_list[a->first_idx];
