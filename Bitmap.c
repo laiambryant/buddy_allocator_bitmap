@@ -6,15 +6,26 @@ DATA_MAX BitMap_getBytes(DATA_MAX bits){
 }
 
 // initializes a bitmap on an external array
-void BitMap_init(BitMap *bit_map, DATA_MAX num_bits, uint8_t *buffer){
+BitMap* BitMap_init(PoolAllocator* p_alloc,  DATA_MAX buf_size, uint8_t *buffer){
+    
+    PoolAllocatorResult res =  PoolAllocator_init(
+        p_alloc, sizeof(BitMap), 1, buffer, buf_size
+        );
+    if(DEBUG) {
+        FILE* f = fopen("OUT/Logs/log.txt", "a");          
+        fprintf("[Bitmap]: %s\n",PoolAllocator_strerror(res));
+        fclose(f); 
+    }
+    BitMap* bit_map = (BitMap*) PoolAllocator_getBlock(p_alloc);
     assert(buffer!=NULL);
     bit_map->Buf = buffer;
-    bit_map->num_bits = num_bits;
-    bit_map->buffer_size = BitMap_getBytes(num_bits);
-    bit_map->end_Buf = buffer+num_bits-1;
-    for(uint32_t i = 0; i<num_bits; i++){
+    bit_map->num_bits = buf_size;
+    bit_map->buffer_size = BitMap_getBytes(buf_size);
+    bit_map->end_Buf = buffer+buf_size-1;
+    for(uint32_t i = 0; i<buf_size; i++){
 		BitMap_setBit(bit_map, i, FREE);
 	}
+    return bit_map;
 }
 
 // sets a the bit bit_num in the bitmap
@@ -40,7 +51,7 @@ uint8_t BitMap_bit(BitMap *bit_map, DATA_MAX bit_num){
 void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
     if(bit_map->Buf!=NULL){
         if(out_mode==F_WRITE){
-            FILE* f = fopen("OUT/bitmap.txt", "w");
+            FILE* f = fopen("OUT/Logs/bitmap.txt", "w");
             fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
             fprintf(f, "Bitmap Metadata:\n");
             fprintf(f, "%d bits\t%d bytes\n", bit_map->num_bits, bit_map->buffer_size);
@@ -65,7 +76,7 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
 
         }
         if(out_mode==F_CONCAT){
-            FILE* f = fopen("OUT/bitmap.txt", "a");
+            FILE* f = fopen("OUT/Logs/bitmap.txt", "a");
             fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
             fprintf(f, "Bitmap Metadata:\n");
             fprintf(f, "%d bits\t%d bytes\n",  bit_map->num_bits, bit_map->buffer_size);

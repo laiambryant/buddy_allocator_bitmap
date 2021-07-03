@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <math.h>
 #define DATA_MAX int
-
+#define DEBUG 1
 /*
     Bitmap will work as following. Each time the buddy allocator creates the nodes of the tree the size of the bitmap will double.
     Implementation will have max 16 bit data types (can be changed changing the DATA_MAX const defined in preproccessing instruction)
@@ -46,7 +46,7 @@ typedef struct BitMap{
 DATA_MAX BitMap_getBytes(DATA_MAX bits);
 
 // initializes a bitmap on an external array
-void BitMap_init(BitMap *bit_map,  DATA_MAX num_bits, uint8_t *buffer);
+BitMap* BitMap_init(PoolAllocator* p_alloc, DATA_MAX buf_size, uint8_t *buffer);
 
 // sets a the bit bit_num in the bitmap
 // status= 0 or 1

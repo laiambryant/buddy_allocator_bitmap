@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
- 
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed Jun 30 12:59:21 2021
+# Make data base, printed on Sat Jul  3 16:25:11 2021
 
 # Variables
 
@@ -51,7 +49,7 @@ SNAP_DATA = /var/snap/code/67
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
-JOURNAL_STREAM = 8:56608
+JOURNAL_STREAM = 8:58539
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # environment
@@ -81,7 +79,7 @@ _ = /snap/code/67/usr/share/code/code
 # makefile (from 'makefile', line 2)
 VGOPTS = --leak-check=full --show-leak-kinds=all  --track-origins=yes  --verbose 
 # environment
-MANAGERPID = 1313
+MANAGERPID = 1260
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
@@ -97,7 +95,7 @@ PATH = /home/liam/.local/bin:/home/liam/.local/bin:/usr/local/sbin:/usr/local/bi
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/liam-desktop:@/tmp/.ICE-unix/1615,unix/liam-desktop:/tmp/.ICE-unix/1615
+SESSION_MANAGER = local/liam-desktop:@/tmp/.ICE-unix/1526,unix/liam-desktop:/tmp/.ICE-unix/1526
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -106,7 +104,7 @@ GDK_PIXBUF_MODULE_FILE = /home/liam/snap/code/common/.cache/gdk-pixbuf-loaders.c
 CC_DUMP = -c
 # environment
 SNAP = /snap/code/67
-# makefile (from 'makefile', line 11)
+# makefile (from 'makefile', line 12)
 TEST_DIR = Tests/
 # environment
 SNAP_VERSION = 507ce72a
@@ -119,7 +117,7 @@ DISABLE_WAYLAND = 1
 # environment
 VSCODE_CRASH_REPORTER_START_OPTIONS = {"companyName":"Microsoft","productName":"VSCode","submitURL":"appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=405981d7-7171-4b3d-8047-52faa804df52&iid=405981d7-7171-4b3d-8047-52faa804df52&sid=405981d7-7171-4b3d-8047-52faa804df52","uploadToServer":true}
 # environment
-INVOCATION_ID = acacd48b115f43b6a4646dfb3c94c61b
+INVOCATION_ID = 7de0cf00e264419981677f54e611e505
 # environment
 GDK_PIXBUF_MODULEDIR = /snap/code/67/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # default
@@ -131,7 +129,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 37333
+GIO_LAUNCHED_DESKTOP_FILE_PID = 23627
 # automatic
 %F = $(notdir $%)
 # environment
@@ -145,10 +143,10 @@ PWD = /home/liam/Documents/buddy_allocator_bitmap
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 1552
+SSH_AGENT_PID = 1478
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
-# makefile (from 'makefile', line 9)
+# makefile (from 'makefile', line 10)
 BINS_DIR = OUT/Bins/
 # environment
 GTK_MODULES = gail:atk-bridge
@@ -170,7 +168,7 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 SNAP_CONTEXT = NujJUTJYhR0zwAoVEbITusRFby-06_0Lh0ID9CiXDBLGfBRmVJii
 # automatic
 +F = $(notdir $+)
-# makefile (from 'makefile', line 10)
+# makefile (from 'makefile', line 11)
 DUMPS_DIR = OUT/Dumps/
 # environment
 ELECTRON_NO_ATTACH_CONSOLE = 1
@@ -203,7 +201,7 @@ CC = gcc
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-af094ec5-c8ca-4b6f-8632-ff0547d3ba65.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-79ac4232-dcd2-4486-ae14-8e442753ea88.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -228,7 +226,7 @@ MAKE_COMMAND := make
 VSCODE_NODE_CACHED_DATA_DIR = /home/liam/.config/Code/CachedData/507ce72a4466fbb27b715c3722558bb15afa9f48
 # default
 .VARIABLES := 
-# makefile (from 'makefile', line 13)
+# makefile (from 'makefile', line 14)
 BINS = $(BINS_DIR)BM_test $(BINS_DIR)Bud_test
 # automatic
 *F = $(notdir $*)
@@ -288,8 +286,10 @@ SNAP_REEXEC =
 CHROME_DESKTOP = code-url-handler.desktop
 # environment
 WINDOWPATH = 2
- 
 # default
+ 
+make: *** No rule to make target 'all'.  Stop.
+ 
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
 # environment
 GJS_DEBUG_OUTPUT = stderr
@@ -297,12 +297,14 @@ GJS_DEBUG_OUTPUT = stderr
 .RECIPEPREFIX := 
 # environment
 LC_ADDRESS = it_IT.UTF-8
+# makefile (from 'makefile', line 9)
+LOG_DIR = OUT/Logs/
 # environment
 LANG = C
 # environment
-VSCODE_PID = 37376
+VSCODE_PID = 23671
 # variable set hash-table stats:
-# Load=144/1024=14%, Rehash=0, Collisions=28/169=17%
+# Load=145/1024=14%, Rehash=0, Collisions=29/170=17%
 
 # Pattern-specific Variable Values
 
@@ -310,9 +312,9 @@ VSCODE_PID = 37376
 
 # Directories
 
-# . (device 2066, inode 11928695): 19 files, no impossibilities.
+# . (device 2066, inode 11928695): 17 files, no impossibilities.
 
-# 19 files, no impossibilities in 1 directories.
+# 17 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -324,7 +326,7 @@ BitmapTest:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 45):
+#  recipe to execute (from 'makefile', line 46):
 	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* pool_allocator.* Bitmap_tree.* $(LIBS)
 	./BM_test
 	mv BM_test $(BINS_DIR)
@@ -344,7 +346,7 @@ buddyDebugFull: buddyGProf buddyVG buddyDump
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-30 12:58:01.902960136
+#  Last modified 2021-07-03 13:41:02.256449398
 #  File has been updated.
 #  Successfully updated.
 
@@ -352,14 +354,14 @@ buddy.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 22):
+#  recipe to execute (from 'makefile', line 23):
 	$(CC) $(CCOPTS) $(CC_DUMP) Main.c Bitmap.*  BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
 
 buddy:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 16):
+#  recipe to execute (from 'makefile', line 17):
 	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.* BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
 	./Bud_test
 	mv Bud_test $(BINS_DIR)
@@ -374,14 +376,14 @@ clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 57):
-	rm -rf *.o Bud_test *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS)
+#  recipe to execute (from 'makefile', line 58):
+	rm -rf *.o Bud_test *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS) $(LOG_DIR)*.txt
 
 buddyDump: buddy.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 39):
+#  recipe to execute (from 'makefile', line 40):
 	objdump -d Bitmap.o > Bitmap_dump.txt Buddy.o > Buddy_dump.txt Main.o > Main_dump.txt Bitmap_tree.o>Bitmap_tree_dump.txt
 	mv *.txt $(DUMPS_DIR)
 
@@ -389,7 +391,7 @@ BitmapVG:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 50):
+#  recipe to execute (from 'makefile', line 51):
 	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* pool_allocator.* Bitmap_tree.* $(LIBS)
 	valgrind $(VGOPTS)--log-file=bm-valgrind-out.txt \./BM_test
 	mv bm-valgrind-out.txt  $(OUT_DIR)
@@ -400,10 +402,10 @@ buddyVG:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 25):
+#  recipe to execute (from 'makefile', line 26):
 	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.*  BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
 	valgrind $(VGOPTS)--log-file=bud-valgrind-out.txt \./Bud_test
-	mv bud-valgrind-out.txt  $(OUT_DIR)
+	mv bud-valgrind-out.txt  $(LOG_DIR)
 	mv Bud_test $(BINS_DIR)
 	rm -rf gmon.out 
 
@@ -411,7 +413,7 @@ buddyGProf:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 32):
+#  recipe to execute (from 'makefile', line 33):
 	$(CC) $(CCOPTS) $(CC_GPROF) -o Bud_test Main.c Bitmap.* * BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
 	./Bud_test
 	gprof Bud_test gmon.out > Bud_TestGprof.txt
@@ -426,12 +428,12 @@ buddyGProf:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 33 / storage = 337 B / avg = 10 B
-# current buf: size = 8162 B / used = 337 B / count = 33 / avg = 10 B
+# strcache buffers: 1 (0) / strings = 31 / storage = 307 B / avg = 9 B
+# current buf: size = 8162 B / used = 307 B / count = 31 / avg = 9 B
 
-# strcache performance: lookups = 50 / hit rate = 34%
+# strcache performance: lookups = 48 / hit rate = 35%
 # hash-table stats:
-# Load=33/8192=0%, Rehash=0, Collisions=1/50=2%
-# Finished Make data base on Wed Jun 30 12:59:21 2021
+# Load=31/8192=0%, Rehash=0, Collisions=1/48=2%
+# Finished Make data base on Sat Jul  3 16:25:11 2021
 
  

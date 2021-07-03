@@ -4,7 +4,8 @@
         "buddy.h": "c",
         "buddyallocator.h": "c",
         "stdio.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "bitmap.h": "c"
     },
     "makefile.launchConfigurations": [
         {

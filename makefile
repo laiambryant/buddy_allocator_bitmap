@@ -6,6 +6,7 @@ CC_GPROF = -pg
 CC_DUMP= -c
 
 OUT_DIR=OUT/
+LOG_DIR=OUT/Logs/
 BINS_DIR=OUT/Bins/
 DUMPS_DIR=OUT/Dumps/
 TEST_DIR=Tests/
@@ -24,7 +25,7 @@ buddy.o:
 buddyVG:
 	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.*  BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
 	valgrind $(VGOPTS)--log-file=bud-valgrind-out.txt \./Bud_test
-	mv bud-valgrind-out.txt  $(OUT_DIR)
+	mv bud-valgrind-out.txt  $(LOG_DIR)
 	mv Bud_test $(BINS_DIR)
 	rm -rf gmon.out 
 
@@ -54,4 +55,4 @@ BitmapVG:
 	rm -rf gmon.out
 
 clean:
-	rm -rf *.o Bud_test *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS)
+	rm -rf *.o Bud_test *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS) $(LOG_DIR)*.txt

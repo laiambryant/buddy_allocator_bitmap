@@ -5,16 +5,22 @@ DATA_MAX tree_get_idx(Buddy_item *bud){
     else return -1;
 }
 DATA_MAX tree_level(DATA_MAX idx){
-    return (DATA_MAX) floor(log2(idx)); //2^level=node_idx => floor(log_2(node_idx)) = level
+    DATA_MAX ret = floor(log2(idx)); //2^level=node_idx => floor(log_2(node_idx)) = level
+    if(ret>=0) return ret;
+    else return 0;
 }
 DATA_MAX tree_first_node_level(DATA_MAX idx){
     return 0x0001<<tree_level(idx);
 }
 DATA_MAX tree_first_free_node_level(BitMap_tree* tree,DATA_MAX level){
-    for(DATA_MAX i=pow(2, level+1)-1;i>0;--i){
-        if(BitMap_bit(tree->BitMap, i)==FREE) return i;
+    if(level == 0) {
+        if(BitMap_bit(tree->BitMap,0) ==ALLOCATED)return -1;
+        else return 0;
     }
-    return 0;
+    for(DATA_MAX i=pow(2, level+1)-1;i>0;--i){
+        if(BitMap_bit(tree->BitMap, i)==FREE) return i+1;
+    }
+    return -1;
 }
 DATA_MAX tree_node_level_offset(DATA_MAX idx){
     return tree_first_node_level(tree_level(idx))-idx;
@@ -46,7 +52,7 @@ DATA_MAX tree_buddiesOnLevel(BitMap_tree *tree, DATA_MAX level){
 }
 void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
     if(out_mode==F_WRITE){
-        FILE* f = fopen("OUT/bitmap.txt", "w");
+        FILE* f = fopen("OUT/Logs/bitmap_tree.txt", "w");
         fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
         fprintf(f, "Tree Metadata:\n");
         fprintf(f, "%d bits\t%d bytes\n", tree->BitMap->num_bits, tree->BitMap->buffer_size);
@@ -86,7 +92,7 @@ void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
         fprintf(stdout,"\n----------------------------------------------------------------------------------------------\n");
     }
     if(out_mode==F_CONCAT){
-        FILE* f = fopen("OUT/bitmap.txt", "a");
+        FILE* f = fopen("OUT/Logs/bitmap_tree.txt", "a");
         fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
         fprintf(f, "Tree Metadata:\n");
         fprintf(f, "%d bits\t%d bytes\n",  tree->BitMap->num_bits, tree->BitMap->buffer_size);
@@ -112,4 +118,12 @@ DATA_MAX tree_nodes(DATA_MAX levels){
 }
 DATA_MAX tree_leafs(DATA_MAX levels){
     return (pow(2, levels));
+}
+
+BitMap_tree* BitMap_tree_init(BitMap_tree *tree, BitMap* b, DATA_MAX levels){
+    tree->BitMap = b;
+    tree->leaf_num = tree_leafs(levels);
+    tree->levels = levels;
+    tree->total_nodes = tree_nodes(levels);
+    return tree;
 }
