@@ -263,14 +263,14 @@ void BuddyAllocator_initSingleBuffer(
         FILE *f = fopen("OUT/Logs/log.txt", "a");
         fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
         fprintf(f,"BuddyAllocator_initSingleBuffer|current configuration\n");
-        fprintf(f," |- memory available ....... [ %ld ]\n",allocator_mem_size);
+        fprintf(f," |- memory available ....... [ %d ]\n",allocator_mem_size);
         fprintf(f," |- tree levels ............. [ %02d ]\n",num_levels);
-        fprintf(f," |- tree nodes .............. [ %ld ]\n",total_nodes);
-        fprintf(f," |- leaf number ............. [ %ld ]\n",leafs);
-        fprintf(f," |- minimum-bs .............. [ %ld ]\n",min_bucket_size);
-        fprintf(f," |- total internal memory ... [ %ld ]\n",internal_mem_required);
-        fprintf(f," |- total user memory ....... [ %ld ]\n",user_mem_required);
-        fprintf(f," |- total required memory ... [ %ld ]\n",total_mem_required);
+        fprintf(f," |- tree nodes .............. [ %d ]\n",total_nodes);
+        fprintf(f," |- leaf number ............. [ %d ]\n",leafs);
+        fprintf(f," |- minimum-bs .............. [ %d ]\n",min_bucket_size);
+        fprintf(f," |- total internal memory ... [ %d ]\n",internal_mem_required);
+        fprintf(f," |- total user memory ....... [ %d ]\n",user_mem_required);
+        fprintf(f," |- total required memory ... [ %d ]\n",total_mem_required);
         fprintf(f,"BuddyAllocator_initSingleBuffer|---------------------\n");
          if (total_mem_required > allocator_mem_size) {
             fprintf(f,"BuddyAllocator_initSingleBuffer|ERROR, invalid configuration\n");
@@ -289,7 +289,7 @@ void BuddyAllocator_initSingleBuffer(
     );
     if(DEBUG){
         FILE *f = fopen("OUT/Logs/log.txt", "a");
-        fprintf(f,"BuddyAllocator_initSingleBuffer|pool allocator result [ %s ]\n","a", PoolAllocator_strerror(init_result));
+        fprintf(f,"BuddyAllocator_initSingleBuffer|pool allocator result [ %s ]\n", PoolAllocator_strerror(init_result));
         fclose(f);
     }
 

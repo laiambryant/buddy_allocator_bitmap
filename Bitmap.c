@@ -13,7 +13,7 @@ BitMap* BitMap_init(PoolAllocator* p_alloc,  DATA_MAX buf_size, uint8_t *buffer)
         );
     if(DEBUG) {
         FILE* f = fopen("OUT/Logs/log.txt", "a");          
-        fprintf("[Bitmap]: %s\n",PoolAllocator_strerror(res));
+        fprintf(f, "[Bitmap]: %s\n",PoolAllocator_strerror(res));
         fclose(f); 
     }
     BitMap* bit_map = (BitMap*) PoolAllocator_getBlock(p_alloc);

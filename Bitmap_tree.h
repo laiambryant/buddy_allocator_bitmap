@@ -15,7 +15,7 @@ typedef struct Bitmap_tree{
 }BitMap_tree;
 
 typedef struct Buddy_item{
-    char* memory;
+    uint8_t* memory;
     BitMap_tree* tree;
     DATA_MAX idx;
     DATA_MAX parent_idx;
