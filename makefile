@@ -23,7 +23,7 @@ buddy.o: buddy.s
 	mv *.o $(OBJS_DIR)
 
 buddy.s:
-	$(CC) $(CCOPTS) -S Main.c Bitmap.*  BuddyAllocator.* pool_allocator.* Bitmap_tree.*
+	$(CC) $(CCOPTS) -S -O2 Main.c Bitmap.*  BuddyAllocator.* pool_allocator.* Bitmap_tree.*
 	rm -rf *.h.gch
 	mv *.s $(ASM_DIR)
 
@@ -32,6 +32,7 @@ BitmapTest:
 	mv a.out bm_test
 	./bm_test
 	mv bm_test $(BINS_DIR)
+	rm -rf *.h.gch
 
 clean:
 	rm -rf *.o *.txt *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS) $(OBJS_DIR)*.o $(LOG_DIR)*.txt $(ASM_DIR)*.s $(BINS_DIR)a.out a.out.dSYM

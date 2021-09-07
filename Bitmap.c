@@ -7,7 +7,6 @@ DATA_MAX BitMap_getBytes(DATA_MAX bits){
 
 // initializes a bitmap on an external array
 BitMap* BitMap_init(PoolAllocator* p_alloc,  DATA_MAX buf_size, uint8_t *buffer){
-    
     PoolAllocatorResult res =  PoolAllocator_init(
         p_alloc, sizeof(BitMap), 1, buffer, buf_size
         );
@@ -21,8 +20,8 @@ BitMap* BitMap_init(PoolAllocator* p_alloc,  DATA_MAX buf_size, uint8_t *buffer)
     bit_map->Buf = buffer;
     bit_map->num_bits = buf_size;
     bit_map->buffer_size = BitMap_getBytes(buf_size);
-    bit_map->end_Buf = buffer+buf_size-1;
-    for(uint32_t i = 0; i<buf_size; i++){
+    bit_map->end_Buf = buffer+buf_size;
+    for(DATA_MAX i = 0; i<buf_size; i++){
 		BitMap_setBit(bit_map, i, FREE);
 	}
     return bit_map;
@@ -88,5 +87,11 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
             fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
             fclose(f);
         }
+    }
+}
+
+void BitMap_reset(BitMap* b){
+    for(int i=0; i<b->num_bits; i++){
+        BitMap_setBit(b, i, FREE);
     }
 }

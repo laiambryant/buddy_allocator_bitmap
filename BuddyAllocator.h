@@ -33,7 +33,7 @@ void BuddyAllocator_init(
                     DATA_MAX num_levels         
                     );
 void BuddyAllocator_initSingleBuffer(
-    BuddyAllocator* alloc,
+    BuddyAllocator* b_alloc,
     PoolAllocator* p_alloc, 
     uint8_t* allocator_mem,
     BitMap_tree* tree,
