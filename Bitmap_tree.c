@@ -16,7 +16,8 @@ DATA_MAX tree_first_free_node_level(BitMap_tree* tree,DATA_MAX level){
         if(BitMap_bit(tree->BitMap,0)==ALLOCATED)return -1;
         else return 0;
     }
-    DATA_MAX start = pow(2, level); DATA_MAX end = pow(2, level+1);
+    DATA_MAX start = pow(2, level); DATA_MAX end = pow(2, level+1)-1;
+    //printf("[START]: %d \t[END]: %d\n", start, end);
     for(DATA_MAX i=start;i<end;i++){
         if(BitMap_bit(tree->BitMap, i)==FREE) return i;
     }
@@ -117,7 +118,7 @@ void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
     }
 }
 DATA_MAX tree_nodes(DATA_MAX levels){
-    return (pow(2, levels+1))-1;
+    return (pow(2, levels)+1)-1;
 }
 DATA_MAX tree_leafs(DATA_MAX levels){
     return (pow(2, levels));
@@ -132,21 +133,22 @@ BitMap_tree* BitMap_tree_init(
     PoolAllocatorResult res =  PoolAllocator_init(
         p_alloc, sizeof(BitMap)+sizeof(BitMap_tree), 1, buffer, buf_size
         );
+
     if(DEBUG) {
         FILE* f = fopen("OUT/Logs/log.txt", "a");          
         fprintf(f, "[Bitmap]: %s\n",PoolAllocator_strerror(res));
         fclose(f); 
     }
+    
     BitMap_tree* tree = (BitMap_tree*) PoolAllocator_getBlock(p_alloc);
+    
     tree->BitMap->Buf = buffer+sizeof(BitMap)+sizeof(BitMap_tree);
     tree->BitMap->num_bits = buf_size;
     tree->BitMap->buffer_size = BitMap_getBytes(buf_size);
     tree->BitMap->end_Buf = buffer+buf_size;
-    for(DATA_MAX i = 0; i<buf_size; i++){
-		BitMap_setBit(tree->BitMap, i, FREE);
-	}
     tree->leaf_num = tree_leafs(levels);
     tree->levels = levels;
     tree->total_nodes = tree_nodes(levels);
+    
     return tree;
 }
