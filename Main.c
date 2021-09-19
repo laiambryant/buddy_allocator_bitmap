@@ -34,7 +34,7 @@ int main(int argc, char const *argv[])
     BuddyAllocator_initSingleBuffer(&BAllocator, &BA_Pallocator, &BA_memory, &tree, BALLOC_MEM_SIZE, LEVELS);
     tree_print(&tree, F_CONCAT);
     BuddyAllocator_printMetadata(&BAllocator, F_WRITE);
-    //printf("Malloc, addr: %p",BuddyAllocator_malloc(&BAllocator,1));
+    printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,1));
 
     return 0;
 }

@@ -7,6 +7,8 @@
 #define BUF_SIZE 1024*8  // 1 KByte Bitmap
 #define MEM_SIZE (BUF_SIZE + sizeof(BitMap)) //Only 1 bitmap to save
 
+#define LEVELS 13
+
 uint8_t buffer[MEM_SIZE];
 uint8_t memory[BUF_SIZE];
 
@@ -31,8 +33,13 @@ int main(int argc, char const *argv[]){
 	BitMap_setBit(b, 7, FREE);
 	Bitmap_print(b, F_CONCAT);
 
-	BitMap_tree tree; 
-	BitMap_tree_init(&tree, b, 9);
+	BitMap_tree tree = {
+		b,
+    	LEVELS,
+		tree_nodes(LEVELS),
+		tree_leafs(LEVELS)
+	}; 
+
 	tree_print(&tree, F_CONCAT);
 
 	for(DATA_MAX j = 0; j<BUF_SIZE; j++){

@@ -26,7 +26,6 @@ void BuddyAllocator_destroyItem(BuddyAllocator* b_alloc, Buddy_item* item);
 void BuddyAllocator_init(
                     BitMap_tree* tree,
                     BuddyAllocator* b_alloc,
-                    PoolAllocator* p_alloc,
                     uint8_t* bm_buffer,
                     uint8_t* memory,
                     DATA_MAX buffer_size,
@@ -40,7 +39,7 @@ void BuddyAllocator_initSingleBuffer(
     DATA_MAX allocator_mem_size,
     DATA_MAX num_levels
     );
-Buddy_item* BuddyAllocator_getBuddy(BuddyAllocator* alloc, DATA_MAX level);
+void* BuddyAllocator_getBuddy(BuddyAllocator* alloc, DATA_MAX level);
 void BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, Buddy_item* item);
 void* BuddyAllocator_malloc(BuddyAllocator* alloc, DATA_MAX size);
 void BuddyAllocator_free(BuddyAllocator* alloc, void* mem);

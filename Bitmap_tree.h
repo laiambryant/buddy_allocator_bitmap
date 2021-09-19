@@ -16,6 +16,9 @@ typedef struct Bitmap_tree{
 
 typedef struct Buddy_item{
     uint8_t* memory;
+    DATA_MAX idx;
+    DATA_MAX level;
+    DATA_MAX size;
 }Buddy_item;
 
 //Given an item returns the index for that item or returns -1 if bud is not initialized
