@@ -2,7 +2,7 @@
 
 // returns the number of bytes to store bits booleans
 DATA_MAX BitMap_getBytes(DATA_MAX bits){
-    return ((bits>>3) + ((bits%8)!=0))*2;
+    return ((bits>>3) + ((bits%8)!=0));
 }
 
 // initializes a bitmap on an external array

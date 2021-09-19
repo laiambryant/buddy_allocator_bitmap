@@ -13,23 +13,19 @@ The docs will be structured in 4 parts:
 ### How to run the tests on the allocator
   I made a very simple makefile to handle all compiling purposes. There are 4 make commands:
     
-  1. <code> make buddyAlloc </code> compiles and runs the main with all the tests
+  1. <code> make buddy </code> links object files, dependancy on make buddy.o, and runs it
     
-  2. <code> make buddy.o </code> compiles object files
+  2. <code> make buddy.o </code> compiles object files dependancy on buddy.s
     
-  3. <code> make buddyVG </code> compiles and runs program through valgrind. Valgrind output is then moved into the OUT sub-directory
+  3. <code> make buddy.s </code> generates assembly code
     
   4. <code> make buddyGProf </code> compiles with GProf options and runs program. Runs gprof on the Gmon and moves the output to the OUT sub-directory
     
-  5. <code> make buddyDump </code> runs <code> make buddy.o </code> and then runs objdump. All the dumps are then moved to the OUT/DUMP sub-directory
+  5. <code> make BitmapTest </code> compiles and runs using the main in Tests/Bitmap_test.c
     
-  6. <code> make buddyDebugFull </code> runs <code> make buddyVG </code>, <code> make buddyGProf </code>, <code> make buddyDump </code>
+  6. <code> make OSXDebug </code> debugs program through lldb
     
   7. <code> make clean </code> removes executable, objects, precompiled headers and ouput of other tests.
-  
-  8. <code>BitmapTest</code> tests bitmap (main is in the /Tests dir)
-  
-  9. <code>BitmapVG</code> Compiles and runs bitmap test through valgrind(main is in the /Tests dir)
 
 
 ### Explaination of how the allocator works

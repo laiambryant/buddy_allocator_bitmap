@@ -4,19 +4,22 @@ DATA_MAX tree_get_idx(Buddy_item *bud);
 
 DATA_MAX tree_level(BitMap_tree* tree, DATA_MAX idx){
     DATA_MAX ret = floor(log2(idx)); //2^level=node_idx => floor(log_2(node_idx)) = level
-    if(ret>tree->levels)return tree->levels;
+    if(ret>tree->levels)return tree->levels-1;
     if(ret>=0) return ret;
     else return 0;
 }
 DATA_MAX tree_first_node_level(BitMap_tree* tree,DATA_MAX idx){
-    return 0x01<<tree_level(tree, idx);
+    //printf("[idx]:%d\n",idx);
+    //printf("[level]:%d\n", tree_level(tree, idx));
+    printf("[First of level]:%d\n", (1 << tree_level(tree, idx)));
+    return (0x01<<tree_level(tree, idx));
 }
 DATA_MAX tree_first_free_node_level(BitMap_tree* tree,DATA_MAX level){
     if(level == 0) {
-        if(BitMap_bit(tree->BitMap,0)==ALLOCATED)return -1;
+        if(BitMap_bit(tree->BitMap,0)==ALLOCATED)return 0;
         else return 0;
     }
-    DATA_MAX start = pow(2, level); DATA_MAX end = pow(2, level+1)-1;
+    DATA_MAX start = pow(2, level); DATA_MAX end = pow(2, level+1);
     //printf("[START]: %d \t[END]: %d\n", start, end);
     for(DATA_MAX i=start;i<end;i++){
         if(BitMap_bit(tree->BitMap, i)==FREE) return i;
@@ -151,4 +154,13 @@ BitMap_tree* BitMap_tree_init(
     tree->total_nodes = tree_nodes(levels);
     
     return tree;
+}
+
+DATA_MAX tree_free_buddies_on_level(BitMap_tree* tree, DATA_MAX level){
+    DATA_MAX start_idx = pow(2, level)-1;
+    DATA_MAX end_idx = pow(2, level+1);
+    for(int i = start_idx; i<end_idx; i++){
+        if(BitMap_bit(tree->BitMap, i)==FREE) return 1;
+    }
+    return 0;
 }

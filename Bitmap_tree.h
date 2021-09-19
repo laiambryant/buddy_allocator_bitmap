@@ -27,7 +27,7 @@ DATA_MAX tree_get_idx(Buddy_item *bud);
 DATA_MAX tree_level(BitMap_tree* tree, DATA_MAX idx);
 //Given an index returns first index of the level of that index
 DATA_MAX tree_first_node_level(BitMap_tree* tree,DATA_MAX idx);
-//Given a bitmap and a level returns 
+//Given a bitmap and a level returns index of first free node of that level, -1 if no free nodes
 DATA_MAX tree_first_free_node_level(BitMap_tree* tree,DATA_MAX level);
 //Given an index calculates the offset of the index in the node
 DATA_MAX tree_node_level_offset(BitMap_tree* tree,DATA_MAX idx);
@@ -45,3 +45,5 @@ DATA_MAX tree_nodes(DATA_MAX levels);
 DATA_MAX tree_leafs(DATA_MAX levels);
 //Initializes bitmap tree
 BitMap_tree* BitMap_tree_init(PoolAllocator* p_alloc, DATA_MAX buf_size, uint8_t *buffer,DATA_MAX levels);
+//checks if there are any free buddies on the level
+DATA_MAX tree_free_buddies_on_level(BitMap_tree* tree, DATA_MAX level);

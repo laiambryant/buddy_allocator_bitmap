@@ -35,6 +35,9 @@ int main(int argc, char const *argv[])
     tree_print(&tree, F_CONCAT);
     BuddyAllocator_printMetadata(&BAllocator, F_WRITE);
     printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,1));
+    printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,30000));
+    printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,30000));
+    printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,30000));
 
     return 0;
 }
