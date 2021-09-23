@@ -19,7 +19,7 @@ DATA_MAX tree_first_free_node_level(BitMap_tree* tree,DATA_MAX level){
         if(BitMap_bit(tree->BitMap,0)==ALLOCATED)return 0;
         else return 0;
     }
-    DATA_MAX start = pow(2, level); DATA_MAX end = pow(2, level+1);
+    DATA_MAX start = pow(2, level)-1; DATA_MAX end = pow(2, level+1);
     //printf("[START]: %d \t[END]: %d\n", start, end);
     for(DATA_MAX i=start;i<end;i++){
         if(BitMap_bit(tree->BitMap, i)==FREE) return i;

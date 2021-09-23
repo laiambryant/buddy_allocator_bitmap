@@ -22,8 +22,6 @@ typedef struct  BuddyAllocator{
 } BuddyAllocator;
 
 DATA_MAX BuddyAllocator_calcSize(DATA_MAX num_levels);
-Buddy_item* BuddyAllocator_createItem(BuddyAllocator* b_alloc, DATA_MAX idx);
-void BuddyAllocator_destroyItem(BuddyAllocator* b_alloc, Buddy_item* item);
 void BuddyAllocator_init(
                     BitMap_tree* tree,
                     BuddyAllocator* b_alloc,

@@ -39,6 +39,19 @@ void BuddyAllocator_init(
         list_alloc_size
     );
 
+    if (DEBUG){
+        FILE *f = fopen("OUT/Logs/log.txt", "a");
+        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
+        fprintf(f, "Initialized buffer...\n");
+        fprintf(f, "Item size: %d\n", b_alloc->p_alloc->item_size);
+        fprintf(f, "Items: %d\n", b_alloc->p_alloc->size);
+        fprintf(f, "Mem Block addr: %p\n", b_alloc->p_alloc->buffer);
+        fprintf(f, "Free list addr: %p\n", b_alloc->p_alloc->free_list);
+        fprintf(f, "Buffer size: %d\n", b_alloc->p_alloc->buffer_size);
+        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
+        fclose(f);
+    }
+
     // we need room also for level 0
     b_alloc->num_levels=num_levels;
     b_alloc->memory=memory;
@@ -61,34 +74,6 @@ DATA_MAX BuddyAllocator_calcSize(DATA_MAX num_levels){
     
 }
 
-Buddy_item* BuddyAllocator_createItem(BuddyAllocator* b_alloc, DATA_MAX idx){
-/*    if(DEBUG){
-        FILE* f = fopen("OUT/Logs/log.txt", "a");
-        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
-        fprintf(f, "Creating item...\n");
-        fprintf(f, "Pool allocator location: %p\n", b_alloc->p_alloc); 
-        fprintf(f, "Bucket size: %d\t", (b_alloc->min_bucket_size)*tree_level(b_alloc->tree, idx)); 
-        fprintf(f, "Buffer addr: %p\t", b_alloc->p_alloc->buffer); 
-        fprintf(f, "First idx: %d\n", b_alloc->p_alloc->first_idx); 
-        fprintf(f, "First item free list: %p\n", b_alloc->p_alloc->free_list); 
-        fprintf(f, "Item Size: %d\t", b_alloc->p_alloc->item_size);
-        fprintf(f, "Buffer size: %d\t", b_alloc->p_alloc->size); 
-        fprintf(f, "Buffer size max: %d\n", b_alloc->p_alloc->size_max); 
-        fprintf(f, "\n----------------------------------------------------------------------------------------------\n"); 
-        fclose(f);
-    }
-    Buddy_item* item = (Buddy_item*) PoolAllocator_getBlock(b_alloc->p_alloc);
-    BitMap_setBit(b_alloc->tree->BitMap, idx, ALLOCATED);
-    return item;
-*/
-    return NULL;
-}
-
-void BuddyAllocator_destroyItem(BuddyAllocator* b_alloc, Buddy_item* item){
-    //PoolAllocatorResult res = PoolAllocator_releaseBlock(b_alloc->p_alloc, item);
-    //assert(res==Success);
-    //BitMap_setBit(b_alloc->tree->BitMap, item->idx, FREE);
-}
 
 void* BuddyAllocator_getBuddy(BuddyAllocator* b_alloc, DATA_MAX level){
 
@@ -286,17 +271,6 @@ void BuddyAllocator_initSingleBuffer(
     DATA_MAX num_levels
     */
     
-    if (DEBUG){
-        FILE *f = fopen("OUT/Logs/log.txt", "a");
-        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
-        fprintf(f, "Initialized buffer...\n");
-        fprintf(f, "Item size: %d\n", b_alloc->p_alloc->item_size);
-        fprintf(f, "Items: %d\n", b_alloc->p_alloc->size);
-        fprintf(f, "Mem Block addr: %p\n", b_alloc->p_alloc->buffer);
-        fprintf(f, "Free list addr: %p\n", b_alloc->p_alloc->free_list);
-        fprintf(f, "Buffer size: %d\n", b_alloc->p_alloc->buffer_size);
-        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
-        fclose(f);
-    }
+
 
 }
