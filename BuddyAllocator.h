@@ -21,6 +21,11 @@ typedef struct  BuddyAllocator{
     uint8_t* memory;
 } BuddyAllocator;
 
+typedef struct BuddyItem{
+    DATA_MAX idx;
+    uint8_t* mem;
+} Buddy_item;
+
 DATA_MAX BuddyAllocator_calcSize(DATA_MAX num_levels);
 void BuddyAllocator_init(
                     BitMap_tree* tree,
@@ -39,7 +44,7 @@ void BuddyAllocator_initSingleBuffer(
     DATA_MAX num_levels
     );
 void* BuddyAllocator_getBuddy(BuddyAllocator* alloc, DATA_MAX level);
-void BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, Buddy_item* item);
+void BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, void* item);
 void* BuddyAllocator_malloc(BuddyAllocator* alloc, DATA_MAX size);
 void BuddyAllocator_free(BuddyAllocator* alloc, void* mem);
 void BuddyAllocator_printMetadata(BuddyAllocator* alloc, OUT_MODE out);

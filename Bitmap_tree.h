@@ -14,15 +14,6 @@ typedef struct Bitmap_tree{
     DATA_MAX leaf_num;
 }BitMap_tree;
 
-typedef struct Buddy_item{
-    uint8_t* memory;
-    DATA_MAX idx;
-    DATA_MAX level;
-    DATA_MAX size;
-}Buddy_item;
-
-//Given an item returns the index for that item or returns -1 if bud is not initialized
-DATA_MAX tree_get_idx(Buddy_item *bud);
 //Given an index returns the level of that index in the tree
 DATA_MAX tree_level(BitMap_tree* tree, DATA_MAX idx);
 //Given an index returns first index of the level of that index

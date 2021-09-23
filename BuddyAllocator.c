@@ -71,7 +71,6 @@ DATA_MAX BuddyAllocator_calcSize(DATA_MAX num_levels){
     DATA_MAX num_items=(1<<(num_levels+1))-1;
     DATA_MAX list_alloc_size = (sizeof(Buddy_item)+sizeof(DATA_MAX))*num_items;
     return list_alloc_size;
-    
 }
 
 
@@ -98,7 +97,7 @@ void* BuddyAllocator_getBuddy(BuddyAllocator* b_alloc, DATA_MAX level){
         return BuddyAllocator_getBuddy(b_alloc, level-1);
     }
 
-    if(tree_free_buddies_on_level(b_alloc->tree, level)){
+    if(tree_free_buddies_on_level(b_alloc->tree, level)){   
         if(level == 0){
             BitMap_setBit(b_alloc->tree->BitMap, 1, ALLOCATED);
             return (void*) b_alloc->memory + 1;
@@ -110,31 +109,38 @@ void* BuddyAllocator_getBuddy(BuddyAllocator* b_alloc, DATA_MAX level){
             offset = b_alloc->min_bucket_size * (b_alloc->num_levels-level);
         } 
         else {
-            offset = b_alloc->min_bucket_size * (b_alloc->num_levels-level) * (first_idx-(tree_first_node_level(b_alloc->tree, first_idx)));
+            DATA_MAX idx=tree_first_node_level(b_alloc->tree, first_idx);
+            offset = b_alloc->min_bucket_size * (b_alloc->num_levels-level) * (first_idx-idx);
         }
         BitMap_setBit(b_alloc->tree->BitMap, first_idx, ALLOCATED);
         
         if(DEBUG){
             printf("Buddies on level %d: %d\n", level, tree_buddiesOnLevel(b_alloc->tree, level));
             printf("%d * (%d - %d) * (%d - %d)\n", b_alloc->min_bucket_size, b_alloc->num_levels, level, first_idx, tree_first_node_level(b_alloc->tree, first_idx));
-            printf("[Address]:%p \t[Offset]: %d,\n", b_alloc->memory, offset);
+            printf("[Address]:%p \t[Offset]: %d,\n", b_alloc->memory+offset, offset);
             tree_print(b_alloc->tree, F_CONCAT);
         } 
+
         return (void*) b_alloc->memory + offset;
+
     }
 
     return(0);
 }
 
-void BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, Buddy_item* item){
-   
+void BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, void* item){
+   DATA_MAX offset = -((void*)alloc->memory - item);
+   printf("[Offset (Bytes)]: %d\t", offset);
+   //printf("[Test]: %d\t", offset/alloc->min_bucket_size);
+   //DATA_MAX item_size = offset/alloc->min_bucket_size*(alloc->num_levels);
+   //printf("[Offset (Idx)]: %d\n", item_size);
 }
 
 void* BuddyAllocator_malloc(BuddyAllocator* alloc, DATA_MAX size){
     //DATA_MAX mem_size = (1<<alloc->num_levels)*alloc->min_bucket_size;
     //Leave space (size of pointer) to write addr of target mem
     DATA_MAX level = tree_level(alloc->tree, alloc->user_mem/(size+sizeof(void*)));
-    printf("[LEVEL]:%d\n",level);
+    if(DEBUG)printf("[LEVEL]:%d\n",level);
     if(level>alloc->num_levels) level = alloc->num_levels-1;
     
     if (DEBUG){
