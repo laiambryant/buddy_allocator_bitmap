@@ -34,10 +34,21 @@ int main(int argc, char const *argv[])
     BuddyAllocator_initSingleBuffer(&BAllocator, &BA_Pallocator, &BA_memory, &tree, BALLOC_MEM_SIZE, LEVELS);
     tree_print(&tree, F_CONCAT);
     BuddyAllocator_printMetadata(&BAllocator, F_WRITE);
+    
+    int* var_ptr = (int*) BuddyAllocator_malloc(&BAllocator,30000);
+    
     printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,1));
-    void* item = BuddyAllocator_malloc(&BAllocator, 10000);
-    BuddyAllocator_releaseBuddy(&BAllocator, item);
+    printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,30000));
+    printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,30000));
+    printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,30000));
+    
+    for (int i = 0; i<240; i++) {
+        int* mem = (int*)BuddyAllocator_malloc(&BAllocator,100);
+        *mem = i;
+        printf("Expected Value: %d, Effective value = %d\n", i, *mem);
+    }    
 
+    BuddyAllocator_free(&BAllocator, var_ptr);
 
     return 0;
 }

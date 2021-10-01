@@ -35,3 +35,38 @@ The docs will be structured in 4 parts:
 
 
 ### References
+
+
+/*
+        if(level == 0){
+            BitMap_setBit(b_alloc->tree->BitMap, 1, ALLOCATED);
+            return (Buddy_item*) b_alloc->memory;
+        }
+        DATA_MAX first_idx = tree_first_free_node_level(b_alloc->tree, level);
+        if(first_idx==0)
+            first_idx = tree_first_node_level(b_alloc->tree, level+1);
+        if(!(first_idx-(tree_first_node_level(b_alloc->tree, first_idx)))){
+            offset = b_alloc->min_bucket_size * (b_alloc->num_levels-level);
+        }
+        else {
+            DATA_MAX idx=tree_first_node_level(b_alloc->tree, first_idx);
+            DATA_MAX free_idx= tree_first_free_node_level(b_alloc->tree, level);
+            offset = b_alloc->min_bucket_size * (b_alloc->num_levels-level) * (first_idx-idx);
+            //offset =((idx - (1 << level))) << (b_alloc->num_levels - free_idx) * b_alloc->min_bucket_size;
+
+        }
+
+        if(DEBUG){
+            printf("Buddies on level %d: %d\n", level, tree_buddiesOnLevel(b_alloc->tree, level));
+            printf("%d * (%d - %d) * (%d - %d)\n", b_alloc->min_bucket_size, b_alloc->num_levels, level, first_idx, tree_first_node_level(b_alloc->tree, first_idx));
+            printf("[Address]:%p \t[Offset]: %d,\n", b_alloc->memory+offset, offset);
+            tree_print(b_alloc->tree, F_CONCAT);
+        }
+
+        Buddy_item* item = b_alloc->memory + offset;
+        item->mem=b_alloc->memory+offset;
+        item->idx=first_idx;
+        BitMap_setBit(b_alloc->tree->BitMap, first_idx, ALLOCATED);
+        printf("Item addr: %p\t Item idx: %d\n", item->mem, item->idx);
+        return item;
+        */

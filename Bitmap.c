@@ -11,9 +11,9 @@ BitMap* BitMap_init(PoolAllocator* p_alloc,  DATA_MAX buf_size, uint8_t *buffer)
         p_alloc, sizeof(BitMap), 1, buffer, buf_size
         );
     if(DEBUG) {
-        FILE* f = fopen("OUT/Logs/log.txt", "a");          
+        FILE* f = fopen("OUT/Logs/log.txt", "a");
         fprintf(f, "[Bitmap]: %s\n",PoolAllocator_strerror(res));
-        fclose(f); 
+        fclose(f);
     }
     BitMap* bit_map = (BitMap*) PoolAllocator_getBlock(p_alloc);
     assert(buffer!=NULL);
@@ -31,9 +31,12 @@ BitMap* BitMap_init(PoolAllocator* p_alloc,  DATA_MAX buf_size, uint8_t *buffer)
 // status= 0 or 1
 void BitMap_setBit(BitMap *bit_map, DATA_MAX bit_num, Status status){
     DATA_MAX page = bit_num>>3;
+    if(page>bit_map->buffer_size){
+        printf("[Page]: %d\t[Buffer size]: %d\t [Bit]: %d\n", page, bit_map->buffer_size, bit_num);
+    }
     assert(page<bit_map->buffer_size);
     DATA_MAX offset =  bit_num %8;
-    if(status==ALLOCATED) 
+    if(status==ALLOCATED)
         bit_map->Buf[page] |= (1U<<offset);
     if(status==FREE)
         bit_map->Buf[page] &= ~(1U<<offset);
@@ -41,13 +44,14 @@ void BitMap_setBit(BitMap *bit_map, DATA_MAX bit_num, Status status){
 
 // inspects the status of the bit bit_num
 uint8_t BitMap_bit(BitMap *bit_map, DATA_MAX bit_num){
+    if(bit_num<0) return -1;
     DATA_MAX page = bit_num>>3;
     if(page>bit_map->buffer_size){
         printf("[Page]: %d\t[Buffer size]: %d\t [Bit]: %d\n", page, bit_map->buffer_size, bit_num);
     }
-    //assert(page<bit_map->buffer_size);
+    assert(page<bit_map->buffer_size);
     DATA_MAX offset =  bit_num %8;
-    return (bit_map->Buf[page] & (1U<<offset))!=0; 
+    return (bit_map->Buf[page] & (1U<<offset))!=0;
 }
 
 void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
@@ -60,14 +64,14 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
             fprintf(f, "%p start\t%p end\n", bit_map->Buf, bit_map->end_Buf);
             fprintf(f, "Bitmap STATUS:\n");
             for(int i=0; i<bit_map->num_bits; i++){
-                fprintf(f, "%x", BitMap_bit(bit_map, i));  
+                fprintf(f, "%x", BitMap_bit(bit_map, i));
             }
             fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
             fclose(f);
         }
         if(out_mode==STDOUT){
             fprintf(stdout, "\n----------------------------------------------------------------------------------------------\n");
-            fprintf(stdout,"Bitmap Metadata:\n"); 
+            fprintf(stdout,"Bitmap Metadata:\n");
             fprintf(stdout,"%d bits\t%d bytes\n",bit_map->num_bits, bit_map->buffer_size);
             fprintf(stdout, "%p start\t%p end\n", bit_map->Buf, bit_map->end_Buf);
             fprintf(stdout,"Bitmap STATUS:\n");
