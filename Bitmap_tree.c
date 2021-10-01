@@ -1,29 +1,30 @@
 #include "Bitmap_tree.h"
 
-DATA_MAX tree_get_idx(Buddy_item *bud){
-    if(bud) return bud->idx;
-    else return -1;
-}
-DATA_MAX tree_level(DATA_MAX idx){
+DATA_MAX tree_level(BitMap_tree* tree, DATA_MAX idx){
     DATA_MAX ret = floor(log2(idx)); //2^level=node_idx => floor(log_2(node_idx)) = level
+    if(ret>tree->levels)return tree->levels-1;
     if(ret>=0) return ret;
     else return 0;
 }
-DATA_MAX tree_first_node_level(DATA_MAX idx){
-    return 0x0001<<tree_level(idx);
+DATA_MAX tree_first_node_level(BitMap_tree* tree,DATA_MAX idx){
+    //printf("[idx]:%d\n",idx);
+    //printf("[level]:%d\n", tree_level(tree, idx));
+    //printf("[First of level]:%d\n", (1 << tree_level(tree, idx)));
+    return (0x01<<tree_level(tree, idx));
 }
 DATA_MAX tree_first_free_node_level(BitMap_tree* tree,DATA_MAX level){
     if(level == 0) {
-        if(BitMap_bit(tree->BitMap,0) ==ALLOCATED)return -1;
+        if(BitMap_bit(tree->BitMap,0)==ALLOCATED)return 0;
         else return 0;
     }
-    for(DATA_MAX i=pow(2, level+1)-1;i>0;--i){
-        if(BitMap_bit(tree->BitMap, i)==FREE) return i+1;
+    DATA_MAX start = pow(2, level); DATA_MAX end = pow(2, level+1);
+    for(DATA_MAX i=start;i<end;i++){
+        if(BitMap_bit(tree->BitMap, i)==FREE) return i;
     }
     return -1;
 }
-DATA_MAX tree_node_level_offset(DATA_MAX idx){
-    return tree_first_node_level(tree_level(idx))-idx;
+DATA_MAX tree_node_level_offset(BitMap_tree* tree, DATA_MAX idx){
+    return tree_first_node_level(tree, tree_level(tree, idx))-idx;
 }
 DATA_MAX tree_getbuddy(DATA_MAX idx){
     return 
@@ -42,7 +43,7 @@ DATA_MAX tree_buddiesOnLevel(BitMap_tree *tree, DATA_MAX level){
         if (BitMap_bit(tree->BitMap, 1)==ALLOCATED || BitMap_bit(tree->BitMap, 2)==ALLOCATED) return 1;
         else return 0;
     }
-    DATA_MAX start_idx = pow(2, level);
+    DATA_MAX start_idx = pow(2, level)-1;
     DATA_MAX end_idx = pow(2, level+1);
     DATA_MAX ret = 0;
     for(int i = start_idx; i<end_idx; i++){
@@ -59,6 +60,7 @@ void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
         fprintf(f, "%p start\t%p end\n", tree->BitMap->Buf, tree->BitMap->end_Buf);
         for (int i = 0; i < tree->levels; i++){
             fprintf(f,"Level %d: %d buddies\t",i, tree_buddiesOnLevel(tree, i));
+            fprintf(f,"LVL first idx = : %.f, last idx: %.f \t", pow(2, i), pow(2,i+1)-1);
             fprintf(f,"First_free: %d\n",tree_first_free_node_level(tree, i));  
         }
         fprintf(f, "\n");
@@ -79,6 +81,7 @@ void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
         fprintf(stdout, "%p start\t%p end\n", tree->BitMap->Buf, tree->BitMap->end_Buf);
         for (int i = 0; i < tree->levels; i++){
             fprintf(stdout,"Level %d: %d buddies\t",i, tree_buddiesOnLevel(tree, i));
+            fprintf(stdout,"LVL first idx = : %.f, last idx: %.f \t", pow(2, i), pow(2,i+1)-1);
             fprintf(stdout,"First_free: %d\n",tree_first_free_node_level(tree, i));
         }
         fprintf(stdout,"\n");
@@ -99,6 +102,7 @@ void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
         fprintf(f, "%p start\t%p end\n", tree->BitMap->Buf, tree->BitMap->end_Buf);
         for (int i = 0; i < tree->levels; i++){
             fprintf(f,"Level %d: %d buddies\t",i, tree_buddiesOnLevel(tree, i));
+            fprintf(f,"LVL first idx = : %.f, last idx: %.f \t", pow(2, i), pow(2,i+1)-1);
             fprintf(f,"First_free: %d\n",tree_first_free_node_level(tree, i));
         }
         fprintf(f,"\n");
@@ -114,16 +118,46 @@ void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
     }
 }
 DATA_MAX tree_nodes(DATA_MAX levels){
-    return (pow(2, levels+1))-1;
+    return (pow(2, levels)+1)-1;
 }
 DATA_MAX tree_leafs(DATA_MAX levels){
     return (pow(2, levels));
 }
 
-BitMap_tree* BitMap_tree_init(BitMap_tree *tree, BitMap* b, DATA_MAX levels){
-    tree->BitMap = b;
+BitMap_tree* BitMap_tree_init(
+    PoolAllocator* p_alloc, 
+    DATA_MAX buf_size, 
+    uint8_t *buffer,
+    DATA_MAX levels){
+    
+    PoolAllocatorResult res =  PoolAllocator_init(
+        p_alloc, sizeof(BitMap)+sizeof(BitMap_tree), 1, buffer, buf_size
+        );
+
+    if(DEBUG) {
+        FILE* f = fopen("OUT/Logs/log.txt", "a");          
+        fprintf(f, "[Bitmap]: %s\n",PoolAllocator_strerror(res));
+        fclose(f); 
+    }
+    
+    BitMap_tree* tree = (BitMap_tree*) PoolAllocator_getBlock(p_alloc);
+    
+    tree->BitMap->Buf = buffer+sizeof(BitMap)+sizeof(BitMap_tree);
+    tree->BitMap->num_bits = buf_size;
+    tree->BitMap->buffer_size = BitMap_getBytes(buf_size);
+    tree->BitMap->end_Buf = buffer+buf_size;
     tree->leaf_num = tree_leafs(levels);
     tree->levels = levels;
     tree->total_nodes = tree_nodes(levels);
+    
     return tree;
+}
+
+DATA_MAX tree_free_buddies_on_level(BitMap_tree* tree, DATA_MAX level){
+    DATA_MAX start_idx = pow(2, level)-1;
+    DATA_MAX end_idx = pow(2, level+1);
+    for(int i = start_idx; i<end_idx; i++){
+        if(BitMap_bit(tree->BitMap, i)==FREE) return 1;
+    }
+    return 0;
 }

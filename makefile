@@ -8,8 +8,9 @@ CC_DUMP= -c
 OUT_DIR=OUT/
 LOG_DIR=OUT/Logs/
 BINS_DIR=OUT/Bins/
-DUMPS_DIR=OUT/Dumps/
 TEST_DIR=Tests/
+OBJS_DIR=OUT/Objs/
+ASM_DIR=OUT/ASM/
 
 BINS=$(BINS_DIR)BM_test $(BINS_DIR)Bud_test
 
@@ -17,7 +18,6 @@ buddy:
 	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.* BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
 	./Bud_test
 	mv Bud_test $(BINS_DIR)
-
 
 buddy.o: 
 	$(CC) $(CCOPTS) $(CC_DUMP) Main.c Bitmap.*  BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
@@ -33,7 +33,7 @@ buddyGProf:
 	$(CC) $(CCOPTS) $(CC_GPROF) -o Bud_test Main.c Bitmap.* * BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
 	./Bud_test
 	gprof Bud_test gmon.out > Bud_TestGprof.txt
-	mv Bud_TestGprof.txt $(OUT_DIR)
+	mv Bud_TestGprof.txt $(LOG_DIR)
 	rm -rf gmon.out Bud_test
 
 buddyDump: buddy.o
@@ -55,4 +55,4 @@ BitmapVG:
 	rm -rf gmon.out
 
 clean:
-	rm -rf *.o Bud_test *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS) $(LOG_DIR)*.txt
+	rm -rf *.o Bud_test *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS) $(LOG_DIR)*.txt $(OBJS_DIR)*.o $(ASM_DIR)*.s 

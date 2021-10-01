@@ -56,3 +56,5 @@ void BitMap_setBit(BitMap *bit_map,  DATA_MAX bit_num, Status status);
 uint8_t BitMap_bit( BitMap *bit_map,  DATA_MAX bit_num);
 
 void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode);
+
+void BitMap_reset(BitMap* b);
