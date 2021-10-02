@@ -23,5 +23,6 @@
             "binaryPath": "home/liam/Documents/buddy_allocator_bitmap/OUT/Bins/Bud_test",
             "binaryArgs": []
         }
-    ]
+    ],
+    "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }

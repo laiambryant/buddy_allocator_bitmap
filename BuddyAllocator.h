@@ -48,4 +48,5 @@ void BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, void* item);
 void* BuddyAllocator_malloc(BuddyAllocator* alloc, DATA_MAX size);
 void BuddyAllocator_free(BuddyAllocator* alloc, void* mem);
 void BuddyAllocator_printMetadata(BuddyAllocator* alloc, OUT_MODE out);
-
+Buddy_item* BuddyAllocator_createItem(BuddyAllocator* alloc, DATA_MAX idx, Buddy_item* parent);
+void BuddyAllocator_destroyItem(BuddyAllocator* alloc, Buddy_item* item);

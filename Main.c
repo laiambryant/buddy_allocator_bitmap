@@ -42,7 +42,7 @@ int main(int argc, char const *argv[])
     printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,30000));
     printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,30000));
     
-    for (int i = 0; i<240; i++) {
+    for (int i = 0; i<10; i++) {
         int* mem = (int*)BuddyAllocator_malloc(&BAllocator,100);
         *mem = i;
         printf("Expected Value: %d, Effective value = %d\n", i, *mem);

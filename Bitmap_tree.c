@@ -161,3 +161,37 @@ DATA_MAX tree_free_buddies_on_level(BitMap_tree* tree, DATA_MAX level){
     }
     return 0;
 }
+
+DATA_MAX tree_balloc_getIdx(BitMap_tree* tree, DATA_MAX level){
+    DATA_MAX start_idx = pow(2, level)-1;
+    DATA_MAX end_idx = pow(2, level+1);
+    for(int i = start_idx; i<end_idx; i++){
+        if(BitMap_bit(tree->BitMap, i)==FREE){
+            tree_setParents(tree, i);
+            //tree_setChildren(tree, i);
+            BitMap_setBit(tree->BitMap, i, ALLOCATED);
+            return i;
+        }
+    }
+    return 0;
+}
+
+void tree_setParents(BitMap_tree* tree, DATA_MAX idx){
+    DATA_MAX level = tree_level(tree, idx);
+    DATA_MAX parent_idx = idx/2;
+    while(level>0){
+        BitMap_setBit(tree->BitMap, parent_idx, ALLOCATED);
+        parent_idx = parent_idx/2;
+        level--;
+    }
+}
+void tree_setChildren(BitMap_tree* tree, DATA_MAX idx){
+    DATA_MAX level = tree_level(tree, idx);
+    DATA_MAX left_child = idx << 1;
+    DATA_MAX right_child = left_child +1;
+    while(level<tree->levels){
+        BitMap_setBit(tree->BitMap, left_child, ALLOCATED);
+        BitMap_setBit(tree->BitMap, right_child, ALLOCATED);
+        level++;
+    }
+}

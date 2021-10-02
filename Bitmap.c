@@ -27,9 +27,9 @@ BitMap* BitMap_init(PoolAllocator* p_alloc,  DATA_MAX buf_size, uint8_t *buffer)
     return bit_map;
 }
 
-// sets a the bit bit_num in the bitmap
-// status= 0 or 1
-void BitMap_setBit(BitMap *bit_map, DATA_MAX bit_num, Status status){
+// sets a the bit bit_num in the bitmap status 1 or 0, Returns 0 if unsuccessful 1 if successful
+DATA_MAX BitMap_setBit(BitMap *bit_map, DATA_MAX bit_num, Status status){
+    if(bit_num<0) return 0;
     DATA_MAX page = bit_num>>3;
     assert(page<bit_map->buffer_size);
     DATA_MAX offset =  bit_num %8;
@@ -37,6 +37,7 @@ void BitMap_setBit(BitMap *bit_map, DATA_MAX bit_num, Status status){
         bit_map->Buf[page] |= (1U<<offset);
     if(status==FREE)
         bit_map->Buf[page] &= ~(1U<<offset);
+    return 1;
 }
 
 // inspects the status of the bit bit_num
