@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Oct  2 10:54:29 2021
+# Make data base, printed on Mon Oct  4 18:49:45 2021
 
 # Variables
 
@@ -51,7 +51,7 @@ SNAP_DATA = /var/snap/code/75
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
-JOURNAL_STREAM = 8:57876
+JOURNAL_STREAM = 8:58765
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # environment
@@ -81,7 +81,7 @@ _ = /snap/code/75/usr/share/code/code
 # makefile (from 'makefile', line 2)
 VGOPTS = --leak-check=full --show-leak-kinds=all  --track-origins=yes  --verbose 
 # environment
-MANAGERPID = 1328
+MANAGERPID = 1321
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
@@ -97,7 +97,7 @@ PATH = /home/liam/.local/bin:/home/liam/.local/bin:/usr/local/sbin:/usr/local/bi
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/liam-desktop:@/tmp/.ICE-unix/1618,unix/liam-desktop:/tmp/.ICE-unix/1618
+SESSION_MANAGER = local/liam-desktop:@/tmp/.ICE-unix/1657,unix/liam-desktop:/tmp/.ICE-unix/1657
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -119,7 +119,7 @@ DISABLE_WAYLAND = 1
 # environment
 VSCODE_CRASH_REPORTER_START_OPTIONS = {"companyName":"Microsoft","productName":"VSCode","submitURL":"appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=405981d7-7171-4b3d-8047-52faa804df52&iid=405981d7-7171-4b3d-8047-52faa804df52&sid=405981d7-7171-4b3d-8047-52faa804df52","uploadToServer":true}
 # environment
-INVOCATION_ID = 07f5a80b2b094a7aaedbb70907829e89
+INVOCATION_ID = 5dab31a49bd34618a7d101ca09b04827
 # environment
 GDK_PIXBUF_MODULEDIR = /snap/code/75/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # default
@@ -133,7 +133,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 5122
+GIO_LAUNCHED_DESKTOP_FILE_PID = 5022
 # automatic
 %F = $(notdir $%)
 # environment
@@ -147,7 +147,7 @@ PWD = /home/liam/Documents/buddy_allocator_bitmap
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 1555
+SSH_AGENT_PID = 1591
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # makefile (from 'makefile', line 10)
@@ -205,7 +205,7 @@ CC = gcc
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-66849556-1f2b-4d2a-997a-42eed3a5420f.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-a825553b-64ff-460e-9735-d36dc8256a7a.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -279,19 +279,30 @@ LC_ALL = C
 # environment
 GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # makefile (from 'makefile', line 3)
+ 
 LIBS = -lm
+ 
 # automatic
+ 
 ^F = $(notdir $^)
-# default
-SUFFIXES := 
-# environment
-SNAP_REEXEC = 
-# environment
-CHROME_DESKTOP = code-url-handler.desktop
-# environment
-WINDOWPATH = 2
+ 
 # default
  
+SUFFIXES := 
+ 
+# environment
+ 
+SNAP_REEXEC = 
+ 
+# environment
+ 
+CHROME_DESKTOP = code-url-handler.desktop
+ 
+# environment
+ 
+WINDOWPATH = 2
+ 
+# default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
 # environment
 GJS_DEBUG_OUTPUT = stderr
@@ -304,7 +315,7 @@ LOG_DIR = OUT/Logs/
 # environment
 LANG = C
 # environment
-VSCODE_PID = 5167
+VSCODE_PID = 5067
 # variable set hash-table stats:
 # Load=146/1024=14%, Rehash=0, Collisions=27/171=16%
 
@@ -348,7 +359,6 @@ buddyDebugFull: buddyGProf buddyVG buddyDump
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
- 
 #  Last modified 2021-10-01 18:17:35.208249127
 #  File has been updated.
 #  Successfully updated.
@@ -437,6 +447,6 @@ buddyGProf:
 # strcache performance: lookups = 49 / hit rate = 34%
 # hash-table stats:
 # Load=32/8192=0%, Rehash=0, Collisions=1/49=2%
-# Finished Make data base on Sat Oct  2 10:54:29 2021
+# Finished Make data base on Mon Oct  4 18:49:45 2021
 
  

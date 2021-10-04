@@ -14,12 +14,12 @@ DATA_MAX tree_first_node_level(BitMap_tree* tree,DATA_MAX idx){
 }
 DATA_MAX tree_first_free_node_level(BitMap_tree* tree,DATA_MAX level){
     if(level == 0) {
-        if(BitMap_bit(tree->BitMap,0)==ALLOCATED)return 0;
+        if(tree_getBit(tree,0)==ALLOCATED)return 0;
         else return 0;
     }
     DATA_MAX start = pow(2, level); DATA_MAX end = pow(2, level+1);
     for(DATA_MAX i=start;i<end;i++){
-        if(BitMap_bit(tree->BitMap, i)==FREE) return i;
+        if(tree_getBit(tree, i)==FREE) return i;
     }
     return -1;
 }
@@ -35,19 +35,19 @@ DATA_MAX tree_getparent(DATA_MAX idx){
 }
 DATA_MAX tree_buddiesOnLevel(BitMap_tree *tree, DATA_MAX level){
     if(level == 0){
-        if (BitMap_bit(tree->BitMap, 0)) return 1;
+        if (tree_getBit(tree, 0)) return 1;
         else return 0;
     }
     if(level == 1){
-        if (BitMap_bit(tree->BitMap, 1)==ALLOCATED && BitMap_bit(tree->BitMap, 2)==ALLOCATED) return 2;
-        if (BitMap_bit(tree->BitMap, 1)==ALLOCATED || BitMap_bit(tree->BitMap, 2)==ALLOCATED) return 1;
+        if (tree_getBit(tree, 1)==ALLOCATED && tree_getBit(tree, 2)==ALLOCATED) return 2;
+        if (tree_getBit(tree, 1)==ALLOCATED || tree_getBit(tree, 2)==ALLOCATED) return 1;
         else return 0;
     }
     DATA_MAX start_idx = pow(2, level)-1;
     DATA_MAX end_idx = pow(2, level+1);
     DATA_MAX ret = 0;
     for(int i = start_idx; i<end_idx; i++){
-        if(BitMap_bit(tree->BitMap, i)==ALLOCATED)ret++;
+        if(tree_getBit(tree, i)==ALLOCATED)ret++;
     }
     return ret;
 }
@@ -67,7 +67,7 @@ void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
         fprintf(f, "Bitmap STATUS:\n");
         for (int i = 0; i < tree->levels; i++){
 		    for (int j = 0; j < pow(2,i);j++){
-			    fprintf(f, "%x",BitMap_bit(tree->BitMap,pow(2,i)+j));
+			    fprintf(f, "%x",tree_getBit(tree,pow(2,i)+j));
 		    }
 		fprintf(f,"\n");
 	    }
@@ -88,7 +88,7 @@ void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
         fprintf(stdout,"Bitmap STATUS:\n");
         for (int i = 0; i < tree->levels; i++){
 		    for (int j = 0; j < pow(2,i);j++){
-			    fprintf(stdout, "%x",BitMap_bit(tree->BitMap,pow(2,i)+j));
+			    fprintf(stdout, "%x",tree_getBit(tree,pow(2,i)+j));
 		    }
 		fprintf(stdout,"\n");
 	    }
@@ -109,7 +109,7 @@ void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
         fprintf(f, "Bitmap STATUS:\n");
         for (int i = 0; i < tree->levels; i++){
 		    for (int j = 0; j < pow(2,i);j++){
-			    fprintf(f,"%x",BitMap_bit(tree->BitMap,(pow(2,i)+j)-1));
+			    fprintf(f,"%x",tree_getBit(tree,(pow(2,i)+j)-1));
 		    }
 		fprintf(f,"\n");
 	    }
@@ -157,7 +157,7 @@ DATA_MAX tree_free_buddies_on_level(BitMap_tree* tree, DATA_MAX level){
     DATA_MAX start_idx = pow(2, level)-1;
     DATA_MAX end_idx = pow(2, level+1);
     for(int i = start_idx; i<end_idx; i++){
-        if(BitMap_bit(tree->BitMap, i)==FREE) return 1;
+        if(tree_getBit(tree, i)==FREE) return 1;
     }
     return 0;
 }
@@ -166,32 +166,53 @@ DATA_MAX tree_balloc_getIdx(BitMap_tree* tree, DATA_MAX level){
     DATA_MAX start_idx = pow(2, level)-1;
     DATA_MAX end_idx = pow(2, level+1);
     for(int i = start_idx; i<end_idx; i++){
-        if(BitMap_bit(tree->BitMap, i)==FREE){
-            tree_setParents(tree, i);
-            //tree_setChildren(tree, i);
-            BitMap_setBit(tree->BitMap, i, ALLOCATED);
+        if(tree_getBit(tree, i)==FREE){
+            tree_setParents(tree, i, ALLOCATED);
+            tree_setChildren(tree, i, ALLOCATED);
+            tree_setBit(tree, i, ALLOCATED);
             return i;
         }
     }
     return 0;
 }
 
-void tree_setParents(BitMap_tree* tree, DATA_MAX idx){
+void tree_setParents(BitMap_tree* tree, DATA_MAX idx, Status status){
     DATA_MAX level = tree_level(tree, idx);
     DATA_MAX parent_idx = idx/2;
     while(level>0){
-        BitMap_setBit(tree->BitMap, parent_idx, ALLOCATED);
+        tree_setBit(tree, parent_idx, status);
         parent_idx = parent_idx/2;
         level--;
     }
 }
-void tree_setChildren(BitMap_tree* tree, DATA_MAX idx){
+void tree_setChildren(BitMap_tree* tree, DATA_MAX idx, Status status){
     DATA_MAX level = tree_level(tree, idx);
     DATA_MAX left_child = idx << 1;
     DATA_MAX right_child = left_child +1;
-    while(level<tree->levels){
-        BitMap_setBit(tree->BitMap, left_child, ALLOCATED);
-        BitMap_setBit(tree->BitMap, right_child, ALLOCATED);
-        level++;
+    tree_setChildren_internal(tree, left_child, right_child, status);
+}
+
+void tree_setChildren_internal(BitMap_tree* tree, DATA_MAX l_child, DATA_MAX r_child, Status status){
+
+    if(l_child >=(tree->total_nodes) || r_child>=(tree->total_nodes)) return;
+    else{
+        tree_setBit(tree, l_child, status);
+        tree_setBit(tree, r_child, status);
+
+        DATA_MAX ll_child = l_child << 1; DATA_MAX lr_child = ll_child +1;
+        DATA_MAX rl_child = r_child << 1; DATA_MAX rr_child = rl_child +1;
+
+        tree_setChildren_internal(tree, ll_child, lr_child, status);
+        tree_setChildren_internal(tree, rl_child, rr_child, status);
     }
+    
+
+}
+
+void tree_setBit(BitMap_tree *tree, DATA_MAX bit_num, Status status){
+    BitMap_setBit(tree->BitMap, bit_num, status);
+}
+
+DATA_MAX tree_getBit(BitMap_tree *tree, DATA_MAX bit_num){
+    return BitMap_bit(tree->BitMap, bit_num);
 }
