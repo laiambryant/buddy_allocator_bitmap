@@ -50,7 +50,7 @@ BitMap* BitMap_init(PoolAllocator* p_alloc, DATA_MAX buf_size, uint8_t *buffer);
 
 // sets a the bit bit_num in the bitmap
 // status= 0 or 1
-void BitMap_setBit(BitMap *bit_map,  DATA_MAX bit_num, Status status);
+DATA_MAX BitMap_setBit(BitMap *bit_map,  DATA_MAX bit_num, Status status);
 
 // inspects the status of the bit bit_num
 uint8_t BitMap_bit( BitMap *bit_map,  DATA_MAX bit_num);

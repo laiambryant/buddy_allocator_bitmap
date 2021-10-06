@@ -38,3 +38,9 @@ DATA_MAX tree_leafs(DATA_MAX levels);
 BitMap_tree* BitMap_tree_init(PoolAllocator* p_alloc, DATA_MAX buf_size, uint8_t *buffer,DATA_MAX levels);
 //checks if there are any free buddies on the level
 DATA_MAX tree_free_buddies_on_level(BitMap_tree* tree, DATA_MAX level);
+DATA_MAX tree_balloc_getIdx(BitMap_tree *tree, DATA_MAX level);
+void tree_setParents(BitMap_tree* tree, DATA_MAX idx, Status status);
+void tree_setChildren(BitMap_tree* tree, DATA_MAX idx, Status status);
+void tree_setChildren_internal(BitMap_tree* tree, DATA_MAX l_child, DATA_MAX r_child, Status status);
+void tree_setBit(BitMap_tree *tree, DATA_MAX bit_num, Status status);
+DATA_MAX tree_getBit(BitMap_tree *tree, DATA_MAX bit_num);
