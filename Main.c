@@ -20,6 +20,7 @@ int main(int argc, char const *argv[])
     //Sets all bits of bitmap and buddy allocator memory to 0
     memset(BM_buffer, 0, BM_BUF_SIZE);
     memset(BA_memory, 0, BALLOC_MEM_SIZE);
+
     //Initializes bitmap
 	BitMap *b = BitMap_init(&BM_PAllocator, BM_BUF_SIZE, BM_buffer);
     BitMap_tree tree = {
@@ -28,25 +29,20 @@ int main(int argc, char const *argv[])
         tree_nodes(LEVELS),
         tree_leafs(LEVELS),
     };
-    /*
-    */
+
     tree_print(&tree, F_WRITE);
     BuddyAllocator_initSingleBuffer(&BAllocator, &BA_Pallocator, &BA_memory, &tree, BALLOC_MEM_SIZE, LEVELS);
     tree_print(&tree, F_CONCAT);
     BuddyAllocator_printMetadata(&BAllocator, F_WRITE);
     
     int* var_ptr = (int*) BuddyAllocator_malloc(&BAllocator,30000);
-    
-    printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,1));
-    printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,30000));
-    printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,30000));
-    printf("Malloc, addr: %p\n",BuddyAllocator_malloc(&BAllocator,30000));
+
     
     for (int i = 0; i<50; i++) {
         int* mem = (int*)BuddyAllocator_malloc(&BAllocator,100);
-        *mem = i;
-        printf("Expected Value: %d, Effective value = %d\n", i, *mem);
-    }    
+    }   
+
+    int* var_ptr1 = (int*) BuddyAllocator_malloc(&BAllocator,30000);
 
     BuddyAllocator_free(&BAllocator, var_ptr);
 

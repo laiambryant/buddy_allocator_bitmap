@@ -26,6 +26,15 @@ typedef struct BuddyItem{
     uint8_t* mem;
 } Buddy_item;
 
+static const char* BuddyAllocator_strerrors[]=
+  {"Success",
+   "NotEnoughMemory",
+   "UnalignedFree",
+   "OutOfRange",
+   "DoubleFree",
+   0
+};
+
 DATA_MAX BuddyAllocator_calcSize(DATA_MAX num_levels);
 void BuddyAllocator_init(
                     BitMap_tree* tree,
