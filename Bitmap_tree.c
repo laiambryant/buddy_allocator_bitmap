@@ -138,12 +138,27 @@ DATA_MAX tree_balloc_getIdx(BitMap_tree* tree, DATA_MAX level){
 }
 
 void tree_setParents(BitMap_tree* tree, DATA_MAX level, DATA_MAX idx, Status status){
-    DATA_MAX parent_idx = tree_getparent(idx);
-    while(level>0){
-        tree_setBit(tree, parent_idx, status);
-        parent_idx = tree_getparent(parent_idx);
-        level--;
+
+    if(status==FREE){   
+        DATA_MAX parent_idx = tree_getparent(idx);
+        while(level>0){
+            if(tree_getBit(tree, tree_getbuddy(idx))==FREE){
+                tree_setBit(tree, parent_idx, status);
+                parent_idx = tree_getparent(parent_idx);
+                level--;
+            }else return;
+        }
+        
     }
+    if(status==ALLOCATED){
+        DATA_MAX parent_idx = tree_getparent(idx);
+        while(level>0){
+            tree_setBit(tree, parent_idx, status);
+            parent_idx = tree_getparent(parent_idx);
+            level--;
+        }
+    }
+    
 }
 void tree_setChildren(BitMap_tree* tree, DATA_MAX idx, Status status){
     DATA_MAX level = tree_level(tree, idx);
@@ -166,11 +181,10 @@ void tree_setChildren_internal(BitMap_tree* tree, DATA_MAX l_child, DATA_MAX r_c
         tree_setChildren_internal(tree, rl_child, rr_child, status);
         
     }
-
 }
 
 void tree_setBit(BitMap_tree *tree, DATA_MAX bit_num, Status status){
-    printf("Setting Bit[%d]\n", bit_num);
+    //printf("Setting Bit[%d]\n", bit_num);
     BitMap_setBit(tree->BitMap, bit_num, status);
 }
 

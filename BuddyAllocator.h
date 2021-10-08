@@ -35,6 +35,16 @@ static const char* BuddyAllocator_strerrors[]=
    0
 };
 
+typedef enum {
+  BA_Success=0x0,
+  BA_NotEnoughMemory=1,
+  BA_UnalignedFree=2,
+  BA_OutOfRange=3,
+  BA_DoubleFree=4
+} BuddyAllocatorResult;
+
+const char* BuddyAllocator_strerror(PoolAllocatorResult result);
+
 DATA_MAX BuddyAllocator_calcSize(DATA_MAX num_levels);
 void BuddyAllocator_init(
                     BitMap_tree* tree,
@@ -53,9 +63,7 @@ void BuddyAllocator_initSingleBuffer(
     DATA_MAX num_levels
     );
 void* BuddyAllocator_getBuddy(BuddyAllocator* alloc, DATA_MAX level);
-void BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, void* item);
+BuddyAllocatorResult BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, void* item);
 void* BuddyAllocator_malloc(BuddyAllocator* alloc, DATA_MAX size);
 void BuddyAllocator_free(BuddyAllocator* alloc, void* mem);
 void BuddyAllocator_printMetadata(BuddyAllocator* alloc, OUT_MODE out);
-Buddy_item* BuddyAllocator_createItem(BuddyAllocator* alloc, DATA_MAX idx, Buddy_item* parent);
-void BuddyAllocator_destroyItem(BuddyAllocator* alloc, Buddy_item* item);
