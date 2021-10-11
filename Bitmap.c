@@ -52,7 +52,7 @@ uint8_t BitMap_bit(BitMap *bit_map, DATA_MAX bit_num){
     if(page>bit_map->buffer_size){
         printf("[Page]: %d\t[Buffer size]: %d\t [Bit]: %d\n", page, bit_map->buffer_size, bit_num);
     }
-    //assert(page<bit_map->buffer_size);
+    assert(page<bit_map->buffer_size);
     DATA_MAX offset =  bit_num %8;
     return (bit_map->Buf[page] & (1U<<offset))!=0; 
 }
@@ -100,8 +100,3 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
     }
 }
 
-void BitMap_reset(BitMap* b){
-    for(int i=0; i<b->num_bits; i++){
-        BitMap_setBit(b, i, FREE);
-    }
-}

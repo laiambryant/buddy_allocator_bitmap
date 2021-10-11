@@ -1,5 +1,9 @@
 #include "Bitmap_tree.h"
 
+BitMap_tree_init(BitMap_tree* tree, BitMap* b, DATA_MAX levels){
+
+}
+
 DATA_MAX tree_level(BitMap_tree* tree, DATA_MAX idx){
     DATA_MAX ret = floor(log2(idx)); //2^level=node_idx => floor(log_2(node_idx)) = level
     if(ret>tree->levels)return tree->levels-1;
@@ -29,7 +33,7 @@ DATA_MAX tree_getparent(DATA_MAX idx){
 }
 DATA_MAX tree_buddiesOnLevel(BitMap_tree *tree, DATA_MAX level){
     if(level == 0){
-        if (tree_getBit(tree, 0)) return 1;
+        if (tree_getBit(tree, 1)==ALLOCATED) return 1;
         else return 0;
     }
     DATA_MAX start_idx = pow(2, level);
@@ -178,13 +182,12 @@ void tree_setChildren_internal(BitMap_tree* tree, DATA_MAX l_child, DATA_MAX r_c
         DATA_MAX rl_child = r_child<<1; DATA_MAX rr_child = rl_child +1;
 
         tree_setChildren_internal(tree, ll_child, lr_child, status);
-        tree_setChildren_internal(tree, rl_child, rr_child, status);
-        
+        tree_setChildren_internal(tree, rl_child, rr_child, status);      
     }
+
 }
 
 void tree_setBit(BitMap_tree *tree, DATA_MAX bit_num, Status status){
-    //printf("Setting Bit[%d]\n", bit_num);
     BitMap_setBit(tree->BitMap, bit_num, status);
 }
 

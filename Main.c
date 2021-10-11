@@ -31,11 +31,9 @@ int main(int argc, char const *argv[])
     };
 
     tree_print(&tree, F_WRITE);
-    BuddyAllocator_initSingleBuffer(&BAllocator, &BA_Pallocator, &BA_memory, &tree, BALLOC_MEM_SIZE, LEVELS);
+    BuddyAllocator_init(&tree, &BAllocator, BM_buffer, BA_memory, BALLOC_MEM_SIZE, LEVELS);
     tree_print(&tree, F_CONCAT);
     BuddyAllocator_printMetadata(&BAllocator, F_WRITE);
-
-    
     
     int* var_ptr = (int*) BuddyAllocator_malloc(&BAllocator,30000);
     
@@ -47,11 +45,7 @@ int main(int argc, char const *argv[])
 
     BuddyAllocator_free(&BAllocator, var_ptr);
 
-    int* var_ptr2 = (int*) BuddyAllocator_malloc(&BAllocator,300000);
-
-    printf("%p\n", var_ptr2);
-
-    
+    int* var_ptr2 = (int*) BuddyAllocator_malloc(&BAllocator,30000);
 
     return 0;
 }
