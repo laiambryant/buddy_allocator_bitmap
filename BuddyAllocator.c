@@ -1,6 +1,11 @@
 #include "BuddyAllocator.h"
 #define DEBUG 1
 
+
+const char* BuddyAllocator_strerror(PoolAllocatorResult result) {
+  return BuddyAllocator_strerrors[result];
+}
+
 void BuddyAllocator_init(
     BitMap_tree* tree,
     BuddyAllocator* b_alloc,
@@ -16,76 +21,28 @@ void BuddyAllocator_init(
     b_alloc->memory = memory;
 
     int list_items=1<<(num_levels+1); // maximum number of allocations, used to size the list
-    int list_alloc_size=(sizeof(Buddy_item)+sizeof(int))*list_items;
+    int list_alloc_size=list_items;
 
-    const DATA_MAX total_nodes = pow(2, num_levels + 1) - 1;
-    const DATA_MAX internal_mem_required = (sizeof(Buddy_item)+sizeof(int))* total_nodes;
-    const DATA_MAX user_mem = buffer_size-internal_mem_required;
-    const DATA_MAX min_bucket_size = (user_mem>>(num_levels));
-
-    b_alloc->min_bucket_size = min_bucket_size;
-
-    const DATA_MAX leafs = tree_leafs(num_levels);
-    const DATA_MAX user_mem_required = min_bucket_size * leafs;
-    const DATA_MAX total_mem_required = internal_mem_required + user_mem;
+    const DATA_MAX min_bucket_size = (buffer_size>>(num_levels));
     
     // the buffer for the list starts where the bitmap ends
     uint8_t *list_start= memory;
-    PoolAllocatorResult init_result = PoolAllocator_init(
-        b_alloc->p_alloc, 
-        min_bucket_size,
-        total_nodes, 
-        list_start, 
-        list_alloc_size
-    );
 
-    if (DEBUG){
-        FILE *f = fopen("OUT/Logs/log.txt", "a");
-        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
-        fprintf(f, "Initialized buffer...\n");
-        fprintf(f, "Item size: %d\n", b_alloc->p_alloc->item_size);
-        fprintf(f, "Items: %d\n", b_alloc->p_alloc->size);
-        fprintf(f, "Mem Block addr: %p\n", b_alloc->p_alloc->buffer);
-        fprintf(f, "Free list addr: %p\n", b_alloc->p_alloc->free_list);
-        fprintf(f, "Buffer size: %d\n", b_alloc->p_alloc->buffer_size);
-        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
-        fclose(f);
-    }
-
-    // we need room also for level 0
-    b_alloc->num_levels=num_levels;
-    b_alloc->memory=memory;
+    b_alloc->min_bucket_size = min_bucket_size;
     b_alloc->tree = tree;
     b_alloc->buffer_size = buffer_size;
     b_alloc->num_items = 1<<(num_levels+1);
-    b_alloc->user_mem=user_mem_required;
+    b_alloc->user_mem=buffer_size;
     
     assert (num_levels<MAX_LEVELS);
-    assert(buffer_size>=internal_mem_required); 
 
-    BitMap_setBit(b_alloc->tree->BitMap, 0, ALLOCATED);
-    
-    if (DEBUG){
-        FILE *f = fopen("OUT/Logs/log.txt", "a");
-        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
-        fprintf(f, "Initialized buffer...\n");
-        fprintf(f, "Item size: %d\n", b_alloc->p_alloc->item_size);
-        fprintf(f, "Items: %d\n", b_alloc->p_alloc->size);
-        fprintf(f, "Mem Block addr: %p\n", b_alloc->p_alloc->buffer);
-        fprintf(f, "Free list addr: %p\n", b_alloc->p_alloc->free_list);
-        fprintf(f, "Buffer size: %d\n", b_alloc->p_alloc->buffer_size);
-        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
-        fclose(f);
-    }
-    
 }
 
 DATA_MAX BuddyAllocator_calcSize(DATA_MAX num_levels){
     DATA_MAX num_items=(1<<(num_levels+1))-1;
-    DATA_MAX list_alloc_size = (sizeof(Buddy_item)+sizeof(DATA_MAX))*num_items;
+    DATA_MAX list_alloc_size = num_items;
     return list_alloc_size;
 }
-
 
 void* BuddyAllocator_getBuddy(BuddyAllocator* b_alloc, DATA_MAX level){
 
@@ -96,95 +53,82 @@ void* BuddyAllocator_getBuddy(BuddyAllocator* b_alloc, DATA_MAX level){
     if(level<0)
         return 0;
 
-    //Checks if there are buddies on the level, if not calls the same function on previous level
-    /*if(!tree_buddiesOnLevel(b_alloc->tree, level)){
-        if(level == 0){
-            return NULL;
-        }
-        void* parent = BuddyAllocator_getBuddy(b_alloc, level-1);
-
-        return parent;
-    }
-
-    if(tree_buddiesOnLevel(b_alloc->tree, level)){
-        
-        DATA_MAX first_idx = tree_first_free_node_level(b_alloc->tree, level);
-
-        if(first_idx==0) 
-            first_idx = tree_first_node_level(b_alloc->tree, level+1);
-
-        BitMap_setBit(b_alloc->tree->BitMap, first_idx, ALLOCATED);
-        //tree_setParents(b_alloc->tree, first_idx);
-
-        if(!(first_idx-(tree_first_node_level(b_alloc->tree, first_idx))))
-            offset = b_alloc->min_bucket_size * (b_alloc->num_levels-level);
-        else
-            offset = b_alloc->min_bucket_size * (b_alloc->num_levels-level) * (first_idx-(tree_first_node_level(b_alloc->tree, first_idx)));
-
-        
-        if(DEBUG){
-            //printf("Buddies on level %d: %d\n", level, tree_buddiesOnLevel(b_alloc->tree, level));
-            printf("%d * (%d - %d) * (%d - %d) = %d\n", b_alloc->min_bucket_size, b_alloc->num_levels, level, first_idx, tree_first_node_level(b_alloc->tree, first_idx), offset);
-            printf("[Address]:%p \t[Offset]: %d,\n", b_alloc->memory+offset, offset);
-            tree_print(b_alloc->tree, F_CONCAT);
-        }
-        if(DEBUG){
-            FILE* f = fopen("OUT/Logs/log.txt", "a");
-            fprintf(f, "Requested Buddy at level %d\t addr:%p\n", level, (void*) b_alloc->memory + offset);
-            fclose(f);   
-        }
-        
-        void* ret = (void*) b_alloc->memory + offset;
-        
-
-        return ret;
-        */
-
+    //Checks if there are free buddies on the level, if not, returns 0x0
     if(!tree_free_buddies_on_level(b_alloc->tree, level))
         return 0;
 
     if(tree_free_buddies_on_level(b_alloc->tree, level)){
+        /*
+        Gets first free index for that level (free idx is assumed to exist because we already checked
+        if there are free buddies on that level).
+        */
         DATA_MAX idx = tree_balloc_getIdx(b_alloc->tree, level);
-        if(!(idx-(tree_first_node_level(b_alloc->tree, idx))))
-            offset = b_alloc->min_bucket_size * (b_alloc->num_levels-level);
-        else
-            offset = b_alloc->min_bucket_size * (b_alloc->num_levels-level) * (idx-(tree_first_node_level(b_alloc->tree, idx)));
+        if(idx==0) return 0;
 
-        
-        if(DEBUG){
-            //printf("Buddies on level %d: %d\n", level, tree_buddiesOnLevel(b_alloc->tree, level));
-            printf("%d * (%d - %d) * (%d - %d) = %d\n", b_alloc->min_bucket_size, b_alloc->num_levels, level, idx, tree_first_node_level(b_alloc->tree, idx), offset);
-            printf("[Address]:%p \t[Offset]: %d,\n", b_alloc->memory+offset, offset);
-            tree_print(b_alloc->tree, F_CONCAT);
-        }
-        if(DEBUG){
-            FILE* f = fopen("OUT/Logs/log.txt", "a");
-            fprintf(f, "Requested Buddy at level %d\t addr:%p\n", level, (void*) b_alloc->memory + offset);
-            fclose(f);   
-        }
-        
+        //Calculates offset
+        offset = b_alloc->min_bucket_size * (b_alloc->num_levels-level) * (idx-(tree_first_node_level(b_alloc->tree, idx)));
         void* ret = (void*) b_alloc->memory + offset;
         
+        //Write idx in first bytes of memory and returns memory address + sizeof(datatype)
+        DATA_MAX* tmp = ret;
+        *tmp = idx;
+        ret = ret+sizeof(DATA_MAX);
+
+        if(DEBUG){
+
+            FILE* f = fopen("OUT/Logs/log.txt", "a");
+            fprintf(f,"%d * (%d - %d) * (%d - %d) = %d\n", b_alloc->min_bucket_size, b_alloc->num_levels, level, idx, tree_first_node_level(b_alloc->tree, idx), offset);
+            fprintf(f,"[Address]:%p \t[Offset]: %d, [Idx]: %d \n\n", ret, offset, *tmp);
+            fclose(f); 
+
+            tree_print(b_alloc->tree, F_CONCAT);
+
+        }
+
         return ret;
     }
         
-
-
     return(0);
 }
 
-void BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, void* item){
-   //DATA_MAX offset = -((void*)alloc->memory - item);
-   //printf("[Offset (Bytes)]: %d\t", offset);
-   //printf("[Test]: %d\t", offset/alloc->min_bucket_size);
-   //DATA_MAX item_size = offset/alloc->min_bucket_size*(alloc->num_levels);
-   //printf("[Offset (Idx)]: %d\n", item_size);
+BuddyAllocatorResult BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, void* item){
+
+    //Fetches idx pointer from the address (subtracting the size of the the datatype chosen)
+    DATA_MAX* idx_ptr = (DATA_MAX*)(item-sizeof(DATA_MAX));
+    DATA_MAX idx = *idx_ptr; 
+
+    DATA_MAX offset = ((uint8_t*)item-sizeof(DATA_MAX))-alloc->memory;
+
+    if(DEBUG){
+        FILE* f = fopen("OUT/Logs/log.txt", "a");
+        fprintf(f, "Freeing memory: @%p\t", idx_ptr);
+        fprintf(f,"Item idx: [%d], num_items[%d], offset[%d]\n",  idx, alloc->num_items, offset);
+        fclose(f);   
+    }
+
+    if(tree_getBit(alloc->tree, idx)==FREE) 
+        return BA_DoubleFree;
+
+    if (offset%alloc->min_bucket_size)
+        return BA_UnalignedFree;
+    
+    if (idx<0 || idx>=alloc->num_items)
+        return BA_OutOfRange;
+
+    tree_setBit(alloc->tree, idx, FREE);
+    //Parents will be freed only if buddy of the node is also free 
+    tree_setParents(alloc->tree, idx, tree_level(alloc->tree, idx), FREE);
+    tree_setChildren(alloc->tree, idx, FREE);
+    if(DEBUG) 
+        tree_print(alloc->tree, F_CONCAT);
+
+    return Success;    
 }
 
 void* BuddyAllocator_malloc(BuddyAllocator* alloc, DATA_MAX size){
     
     //Leave space (size of pointer) to write addr of target mem
-    DATA_MAX level = tree_level(alloc->tree, alloc->user_mem/(size+sizeof(void*)));
+    DATA_MAX level = tree_level(alloc->tree, alloc->user_mem/(size+sizeof(DATA_MAX)));
     if(level>alloc->num_levels) level = alloc->num_levels-1;
     
     if (DEBUG){
@@ -194,21 +138,24 @@ void* BuddyAllocator_malloc(BuddyAllocator* alloc, DATA_MAX size){
     }
     
     void* buddy_ptr = BuddyAllocator_getBuddy(alloc, level);
+    //If getBuddy does not find buddy it will return 0x0 as an address so we will exit
+    if(buddy_ptr==0x0){
+        printf("Malloc: %s\n", BuddyAllocator_strerror(BA_NotEnoughMemory));
+        assert(buddy_ptr!=0x0);
+    }
 
     return buddy_ptr;
 }
 
 void BuddyAllocator_free(BuddyAllocator* alloc, void* mem){
+    BuddyAllocatorResult res = BuddyAllocator_releaseBuddy(alloc, mem);
+
     if(DEBUG){
         FILE* f = fopen("OUT/Logs/log.txt", "a");
-        fprintf(f, "Freeing memory @%p\n", mem);
-        fclose(f);   
+        fprintf(f, "Result: %s", BuddyAllocator_strerror(res));
+        fclose(f);
     }
 
-    char* p = (char*) mem; p-=8;
-    Buddy_item* buddy_ptr = (Buddy_item*)p;
-    Buddy_item* buddy = buddy_ptr;
-    BuddyAllocator_releaseBuddy(alloc, buddy);
 }
 
 void BuddyAllocator_printMetadata(BuddyAllocator* b_alloc, OUT_MODE out){
@@ -255,90 +202,4 @@ void BuddyAllocator_printMetadata(BuddyAllocator* b_alloc, OUT_MODE out){
         fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
         fclose(f);
     }
-}
-
-//Initializes buddy allocator with one single buffer
-void BuddyAllocator_initSingleBuffer(
-        BuddyAllocator* b_alloc, 
-        PoolAllocator* p_alloc,
-        uint8_t* allocator_mem,
-        BitMap_tree* tree,
-        DATA_MAX allocator_mem_size,
-        DATA_MAX num_levels){
-    
-    //Checks if allocator and memory buffer are correctly initialized and if memory buffer was
-    assert(b_alloc);
-    assert(allocator_mem_size!=0 && allocator_mem);
-
-    b_alloc->p_alloc = p_alloc;
-
-    const DATA_MAX total_nodes = pow(2, num_levels + 1) - 1;
-    const DATA_MAX internal_mem_required = (sizeof(Buddy_item)+sizeof(int))* total_nodes;
-    const DATA_MAX user_mem = allocator_mem_size-internal_mem_required;
-    const DATA_MAX min_bucket_size = (user_mem>>(num_levels));
-    const DATA_MAX leafs = tree_leafs(num_levels);
-    const DATA_MAX user_mem_required = min_bucket_size * leafs;
-    const DATA_MAX total_mem_required = internal_mem_required + user_mem;
-
-    if(DEBUG){
-        FILE *f = fopen("OUT/Logs/log.txt", "a");
-        fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
-        fprintf(f,"BuddyAllocator_initSingleBuffer|current configuration\n");
-        fprintf(f," |- memory available ........ [ %d ]\n",allocator_mem_size);
-        fprintf(f," |- tree levels ............. [ %02d ]\n",num_levels);
-        fprintf(f," |- tree nodes .............. [ %d ]\n",total_nodes);
-        fprintf(f," |- leaf number ............. [ %d ]\n",leafs);
-        fprintf(f," |- minimum-bs .............. [ %d ]\n",min_bucket_size);
-        fprintf(f," |- total internal memory ... [ %d ]\n",internal_mem_required);
-        fprintf(f," |- total user memory ....... [ %d ]\n",user_mem_required);
-        fprintf(f," |- total required memory ... [ %d ]\n",total_mem_required);
-        fprintf(f,"BuddyAllocator_initSingleBuffer|--------------------------------------------------------------\n");
-        if (total_mem_required > allocator_mem_size) {
-            fprintf(f,"BuddyAllocator_initSingleBuffer|ERROR, invalid configuration\n");
-            return;
-        }
-        fclose(f);
-    }
-    
-    uint8_t *list_start = allocator_mem; 
-    uint8_t *mem_start = allocator_mem+internal_mem_required;
-    
-    BuddyAllocator_init(
-        tree,
-        b_alloc,
-        list_start,
-        mem_start,
-        total_mem_required,
-        num_levels
-    );
-
-}
-
-Buddy_item* BuddyAllocator_createItem(BuddyAllocator* alloc, DATA_MAX idx, Buddy_item* parent){
-    
-    Buddy_item *item = (Buddy_item*) PoolAllocator_getBlock(alloc->p_alloc);
-
-    item->idx = idx;
-    DATA_MAX delta_idx = (idx-(tree_first_node_level(alloc->tree, idx)));
-    if(!delta_idx)
-        item->mem = alloc->memory + 
-            alloc->min_bucket_size * 
-            (alloc->num_levels-tree_level(alloc->tree, idx));
-    else
-        item->mem = alloc->memory + 
-                (alloc->min_bucket_size * 
-                (alloc->num_levels-(tree_first_node_level(alloc->tree, idx))) 
-                * delta_idx);
-    
-    return item;
-
-}
-
-void BuddyAllocator_destroyItem(BuddyAllocator* alloc, Buddy_item* item){
-
-    DATA_MAX lvl = tree_level(alloc->tree, item->idx);
-
-    PoolAllocatorResult res = PoolAllocator_releaseBlock(alloc->p_alloc, item);
-    assert(res==Success);
-
 }

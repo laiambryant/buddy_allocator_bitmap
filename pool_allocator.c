@@ -36,6 +36,7 @@ PoolAllocatorResult PoolAllocator_init(PoolAllocator* a,
   
   a->buffer=memory_block; // the upper part of the buffer is used as memory
   a->free_list= (int*)(memory_block+item_size*num_items); // the lower part is for bookkeeping
+  a->bucket_size=memory_size;
 
   // now we populate the free list by constructing a linked list
   for (int i=0; i<a->size-1; ++i){

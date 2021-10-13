@@ -21,12 +21,29 @@ typedef struct  BuddyAllocator{
     uint8_t* memory;
 } BuddyAllocator;
 
-typedef struct BuddyItem{
-    DATA_MAX idx;
-    uint8_t* mem;
-} Buddy_item;
+static const char* BuddyAllocator_strerrors[]={"Success",
+   "NotEnoughMemory",
+   "UnalignedFree",
+   "OutOfRange",
+   "DoubleFree",
+   0
+};
 
+typedef enum {
+  BA_Success=0x0,
+  BA_NotEnoughMemory=1,
+  BA_UnalignedFree=2,
+  BA_OutOfRange=3,
+  BA_DoubleFree=4
+} BuddyAllocatorResult;
+
+//Gets string error corresponding to errnumber
+const char* BuddyAllocator_strerror(PoolAllocatorResult result);
+
+//calculates the size of the BuddyAllocator
 DATA_MAX BuddyAllocator_calcSize(DATA_MAX num_levels);
+
+//Initializes Buddy allocator
 void BuddyAllocator_init(
                     BitMap_tree* tree,
                     BuddyAllocator* b_alloc,
@@ -35,18 +52,13 @@ void BuddyAllocator_init(
                     DATA_MAX buffer_size,
                     DATA_MAX num_levels         
                     );
-void BuddyAllocator_initSingleBuffer(
-    BuddyAllocator* b_alloc,
-    PoolAllocator* p_alloc, 
-    uint8_t* allocator_mem,
-    BitMap_tree* tree,
-    DATA_MAX allocator_mem_size,
-    DATA_MAX num_levels
-    );
+//Given a level, returns the mem address corresponding to the buddy given by buddy allocator
 void* BuddyAllocator_getBuddy(BuddyAllocator* alloc, DATA_MAX level);
-void BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, void* item);
+//Releases item pointed by item* pointer, fetching idx from 4 bits preceding the address
+BuddyAllocatorResult BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, void* item);
+//Calculates level of buddy alloc to serve memory request and calls getBuddy. Returns pointer to memory zone
 void* BuddyAllocator_malloc(BuddyAllocator* alloc, DATA_MAX size);
+//Calls releaseBuddy to free memory pointed by mem address 
 void BuddyAllocator_free(BuddyAllocator* alloc, void* mem);
+//Prints metadata for buddy allocator
 void BuddyAllocator_printMetadata(BuddyAllocator* alloc, OUT_MODE out);
-Buddy_item* BuddyAllocator_createItem(BuddyAllocator* alloc, DATA_MAX idx, Buddy_item* parent);
-void BuddyAllocator_destroyItem(BuddyAllocator* alloc, Buddy_item* item);

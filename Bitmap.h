@@ -55,6 +55,5 @@ DATA_MAX BitMap_setBit(BitMap *bit_map,  DATA_MAX bit_num, Status status);
 // inspects the status of the bit bit_num
 uint8_t BitMap_bit( BitMap *bit_map,  DATA_MAX bit_num);
 
+//Prints Bitmap
 void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode);
-
-void BitMap_reset(BitMap* b);

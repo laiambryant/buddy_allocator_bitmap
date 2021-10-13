@@ -7,23 +7,29 @@ DATA_MAX BitMap_getBytes(DATA_MAX bits){
 
 // initializes a bitmap on an external array
 BitMap* BitMap_init(PoolAllocator* p_alloc,  DATA_MAX buf_size, uint8_t *buffer){
+    
     PoolAllocatorResult res =  PoolAllocator_init(
         p_alloc, sizeof(BitMap), 1, buffer, buf_size
-        );
+    );
+    
     if(DEBUG) {
         FILE* f = fopen("OUT/Logs/log.txt", "a");          
         fprintf(f, "[Bitmap]: %s\n",PoolAllocator_strerror(res));
         fclose(f); 
     }
+    
     BitMap* bit_map = (BitMap*) PoolAllocator_getBlock(p_alloc);
     assert(buffer!=NULL);
+    
     bit_map->Buf = buffer;
     bit_map->num_bits = buf_size;
     bit_map->buffer_size = BitMap_getBytes(buf_size);
     bit_map->end_Buf = buffer+buf_size;
+    
     for(DATA_MAX i = 0; i<buf_size; i++){
 		BitMap_setBit(bit_map, i, FREE);
 	}
+    
     return bit_map;
 }
 
@@ -46,7 +52,7 @@ uint8_t BitMap_bit(BitMap *bit_map, DATA_MAX bit_num){
     if(page>bit_map->buffer_size){
         printf("[Page]: %d\t[Buffer size]: %d\t [Bit]: %d\n", page, bit_map->buffer_size, bit_num);
     }
-    //assert(page<bit_map->buffer_size);
+    assert(page<bit_map->buffer_size);
     DATA_MAX offset =  bit_num %8;
     return (bit_map->Buf[page] & (1U<<offset))!=0; 
 }
@@ -94,8 +100,3 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
     }
 }
 
-void BitMap_reset(BitMap* b){
-    for(int i=0; i<b->num_bits; i++){
-        BitMap_setBit(b, i, FREE);
-    }
-}
