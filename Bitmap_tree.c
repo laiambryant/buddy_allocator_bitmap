@@ -209,5 +209,5 @@ void tree_setBit(BitMap_tree *tree, DATA_MAX bit_num, Status status){
 }
 
 DATA_MAX tree_getBit(BitMap_tree *tree, DATA_MAX bit_num){
-    return BitMap_bit(tree->BitMap, bit_num);
+    return BitMap_getBit(tree->BitMap, bit_num);
 }

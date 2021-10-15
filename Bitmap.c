@@ -37,7 +37,7 @@ DATA_MAX BitMap_setBit(BitMap *bit_map, DATA_MAX bit_num, Status status){
 }
 
 // inspects the status of the bit bit_num
-uint8_t BitMap_bit(BitMap *bit_map, DATA_MAX bit_num){
+uint8_t BitMap_getBit(BitMap *bit_map, DATA_MAX bit_num){
     DATA_MAX page = bit_num>>3;
     if(page>bit_map->buffer_size){
         printf("[Page]: %d\t[Buffer size]: %d\t [Bit]: %d\n", page, bit_map->buffer_size, bit_num);
@@ -57,7 +57,7 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
             fprintf(f, "%p start\t%p end\n", bit_map->Buf, bit_map->end_Buf);
             fprintf(f, "Bitmap STATUS:\n");
             for(int i=0; i<bit_map->num_bits; i++){
-                fprintf(f, "%x", BitMap_bit(bit_map, i));  
+                fprintf(f, "%x", BitMap_getBit(bit_map, i));  
             }
             fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
             fclose(f);
@@ -69,7 +69,7 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
             fprintf(stdout, "%p start\t%p end\n", bit_map->Buf, bit_map->end_Buf);
             fprintf(stdout,"Bitmap STATUS:\n");
             for(int i=0; i<bit_map->num_bits; i++){
-                fprintf(stdout, "%x", BitMap_bit(bit_map, i));
+                fprintf(stdout, "%x", BitMap_getBit(bit_map, i));
             }
             fprintf(stdout,"\n----------------------------------------------------------------------------------------------\n");
 
@@ -82,7 +82,7 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
             fprintf(f, "%p start\t%p end\n", bit_map->Buf, bit_map->end_Buf);
             fprintf(f, "Bitmap STATUS:\n");
             for(int i=0; i<bit_map->num_bits; i++){
-                fprintf(f, "%x", BitMap_bit(bit_map, i));
+                fprintf(f, "%x", BitMap_getBit(bit_map, i));
             }
             fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
             fclose(f);
