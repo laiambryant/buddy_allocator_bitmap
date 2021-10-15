@@ -2,50 +2,36 @@
 #include <string.h>
 
 #define LEVELS 9
-//Buffer for bitmap
-#define BM_BUF_SIZE 512// 512 bit Bitmap
+#define BM_BUF_SIZE 512 //pow(2, LEVELS)
 #define BM_SIZE BM_BUF_SIZE + sizeof(BitMap) + sizeof(BitMap_tree)//Only 1 bitmap to save
-uint8_t BM_buffer[BM_SIZE];
 
 //Buffer for Buddy allocator
 #define BALLOC_MEM_SIZE 1024*1024 //1Mbit Memory Idxable
-#define BALLOC_SIZE BALLOC_MEM_SIZE + sizeof(BuddyAllocator) + sizeof(PoolAllocator)
+#define BALLOC_SIZE BALLOC_MEM_SIZE+sizeof(BuddyAllocator)+BM_SIZE
 uint8_t BA_memory[BALLOC_SIZE];
-
-BuddyAllocator BAllocator;
-PoolAllocator BM_PAllocator, BA_Pallocator; 
 
 int main(int argc, char const *argv[])
 {
     //Sets all bits of bitmap and buddy allocator memory to 0
-    memset(BM_buffer, 0, BM_BUF_SIZE);
     memset(BA_memory, 0, BALLOC_MEM_SIZE);
 
     //Initializes bitmap
-	BitMap *b = BitMap_init(&BM_PAllocator, BM_BUF_SIZE, BM_buffer);
-    BitMap_tree tree = {
-        b,
-        LEVELS,
-        tree_nodes(LEVELS),
-        tree_leafs(LEVELS),
-    };
-
-    tree_print(&tree, F_WRITE);
-    BuddyAllocator_init(&tree, &BAllocator, BM_buffer, BA_memory, BALLOC_MEM_SIZE, LEVELS);
-    tree_print(&tree, F_CONCAT);
-    BuddyAllocator_printMetadata(&BAllocator, F_WRITE);
+    BuddyAllocator *b_alloc = BuddyAllocator_init(
+        BA_memory, BALLOC_SIZE, LEVELS
+    );
+        
+    int* var_ptr = (int*) BuddyAllocator_malloc(b_alloc,30000);
     
-    int* var_ptr = (int*) BuddyAllocator_malloc(&BAllocator,30000);
-    
-    for (int i = 0; i<50; i++) {
-        int* mem = (int*)BuddyAllocator_malloc(&BAllocator,100);
+    for (int i = 0; i<100; i++) {
+        int* mem = (int*)BuddyAllocator_malloc(b_alloc,100);
     }   
 
-    int* var_ptr1 = (int*) BuddyAllocator_malloc(&BAllocator,30000);
+    int* var_ptr1 = (int*) BuddyAllocator_malloc(b_alloc,30000);
 
-    BuddyAllocator_free(&BAllocator, var_ptr);
+    BuddyAllocator_free(b_alloc, var_ptr);
 
-    int* var_ptr2 = (int*) BuddyAllocator_malloc(&BAllocator,30000);
+    int* var_ptr2 = (int*) BuddyAllocator_malloc(b_alloc,30000);
+
 
     return 0;
 }

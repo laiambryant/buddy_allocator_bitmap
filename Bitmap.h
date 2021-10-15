@@ -1,6 +1,5 @@
 #pragma once
 #include "Bitmap.h"
-#include "pool_allocator.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -46,7 +45,7 @@ typedef struct BitMap{
 DATA_MAX BitMap_getBytes(DATA_MAX bits);
 
 // initializes a bitmap on an external array
-BitMap* BitMap_init(PoolAllocator* p_alloc, DATA_MAX buf_size, uint8_t *buffer);
+BitMap* BitMap_init(uint8_t* buffer, DATA_MAX buf_size);
 
 // sets a the bit bit_num in the bitmap
 // status= 0 or 1

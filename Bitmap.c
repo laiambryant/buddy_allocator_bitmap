@@ -1,31 +1,21 @@
 #include "Bitmap.h"
 
-// returns the number of bytes to store bits booleans
-DATA_MAX BitMap_getBytes(DATA_MAX bits){
-    return ((bits>>3) + ((bits%8)!=0));
-}
-
 // initializes a bitmap on an external array
-BitMap* BitMap_init(PoolAllocator* p_alloc,  DATA_MAX buf_size, uint8_t *buffer){
-    
-    PoolAllocatorResult res =  PoolAllocator_init(
-        p_alloc, sizeof(BitMap), 1, buffer, buf_size
-    );
-    
-    if(DEBUG) {
-        FILE* f = fopen("OUT/Logs/log.txt", "a");          
-        fprintf(f, "[Bitmap]: %s\n",PoolAllocator_strerror(res));
-        fclose(f); 
-    }
-    
-    BitMap* bit_map = (BitMap*) PoolAllocator_getBlock(p_alloc);
+BitMap* BitMap_init(uint8_t *buffer, DATA_MAX buf_size){
+
+    //Finds addr for struct and for bitmap
+    BitMap* bit_map = (BitMap*) buffer;
+    uint8_t* bm_mem_start = ((uint8_t*)buffer)+sizeof(BitMap);
+
     assert(buffer!=NULL);
     
-    bit_map->Buf = buffer;
+    //Initializes params
+    bit_map->Buf = bm_mem_start;
     bit_map->num_bits = buf_size;
-    bit_map->buffer_size = BitMap_getBytes(buf_size);
-    bit_map->end_Buf = buffer+buf_size;
+    bit_map->buffer_size = BitMap_getBytes(bit_map->num_bits);
+    bit_map->end_Buf = buffer+bit_map->buffer_size;
     
+    //sets all bits to 0
     for(DATA_MAX i = 0; i<buf_size; i++){
 		BitMap_setBit(bit_map, i, FREE);
 	}
@@ -100,3 +90,7 @@ void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode){
     }
 }
 
+// returns the number of bytes to store bits booleans
+DATA_MAX BitMap_getBytes(DATA_MAX bits){
+    return ((bits>>3) + ((bits%8)!=0));
+}

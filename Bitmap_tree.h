@@ -14,6 +14,7 @@ typedef struct Bitmap_tree{
     DATA_MAX leaf_num;
 }BitMap_tree;
 
+
 //Given an index returns the level of that index in the tree
 DATA_MAX tree_level(BitMap_tree* tree, DATA_MAX idx);
 //Given an index returns first index of the level of that index
@@ -34,8 +35,8 @@ void tree_print(BitMap_tree *tree, OUT_MODE out);
 DATA_MAX tree_nodes(DATA_MAX levels);
 //Calculates number of leafs given the number of levels
 DATA_MAX tree_leafs(DATA_MAX levels);
-//Initializes bitmap tree
-DATA_MAX BitMap_tree_init(BitMap_tree* tree, BitMap* b, DATA_MAX levels);
+//Initializes bitmap tree buffer 
+BitMap_tree* BitMap_tree_init(uint8_t* buffer, DATA_MAX buffer_size, DATA_MAX levels);
 //checks if there are any free buddies on the level
 DATA_MAX tree_free_buddies_on_level(BitMap_tree* tree, DATA_MAX level);
 //Gets a free idx on the level

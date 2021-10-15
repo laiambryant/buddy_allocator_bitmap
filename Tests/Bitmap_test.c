@@ -1,6 +1,5 @@
 #include "../Bitmap.h"
 #include "../Bitmap_tree.h"
-#include "../pool_allocator.h"
 #include <stdio.h>
 
 
@@ -14,9 +13,8 @@ uint8_t memory[BUF_SIZE];
 
 int main(int argc, char const *argv[]){
 
-	PoolAllocator PAllocator;
 
-	BitMap *b = BitMap_init(&PAllocator, BUF_SIZE, memory);
+	BitMap *b = BitMap_init(memory, MEM_SIZE);
 
 	for(DATA_MAX i = 0; i<BUF_SIZE; i++){
 		BitMap_setBit(b, i, ALLOCATED);
@@ -47,9 +45,6 @@ int main(int argc, char const *argv[]){
 		else BitMap_setBit(b, j, ALLOCATED);
 	}
 	tree_print(&tree, F_CONCAT);
-	BitMap_reset(tree.BitMap);
-	tree_print(&tree, F_CONCAT);
 
-	PoolAllocator_releaseBlock(&PAllocator, b);
 	return 0;
 }

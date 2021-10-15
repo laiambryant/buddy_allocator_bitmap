@@ -1,5 +1,4 @@
 #pragma once
-#include "pool_allocator.h"
 #include "Bitmap_tree.h" 
 #include <stdint.h>
 #include <math.h>
@@ -17,7 +16,6 @@ typedef struct  BuddyAllocator{
     DATA_MAX min_bucket_size;
     DATA_MAX num_items;
     BitMap_tree* tree;
-    PoolAllocator *p_alloc;
     uint8_t* memory;
 } BuddyAllocator;
 
@@ -38,20 +36,16 @@ typedef enum {
 } BuddyAllocatorResult;
 
 //Gets string error corresponding to errnumber
-const char* BuddyAllocator_strerror(PoolAllocatorResult result);
+const char* BuddyAllocator_strerror(BuddyAllocatorResult result);
 
 //calculates the size of the BuddyAllocator
 DATA_MAX BuddyAllocator_calcSize(DATA_MAX num_levels);
-
 //Initializes Buddy allocator
-void BuddyAllocator_init(
-                    BitMap_tree* tree,
-                    BuddyAllocator* b_alloc,
-                    uint8_t* bm_buffer,
-                    uint8_t* memory,
-                    DATA_MAX buffer_size,
-                    DATA_MAX num_levels         
-                    );
+BuddyAllocator* BuddyAllocator_init( 
+  uint8_t* ba_buffer,
+  DATA_MAX buffer_size,
+  DATA_MAX num_levels         
+);
 //Given a level, returns the mem address corresponding to the buddy given by buddy allocator
 void* BuddyAllocator_getBuddy(BuddyAllocator* alloc, DATA_MAX level);
 //Releases item pointed by item* pointer, fetching idx from 4 bits preceding the address

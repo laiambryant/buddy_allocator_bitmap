@@ -2,46 +2,35 @@
 #define DEBUG 1
 
 
-const char* BuddyAllocator_strerror(PoolAllocatorResult result) {
-  return BuddyAllocator_strerrors[result];
-}
-
-void BuddyAllocator_init(
-    BitMap_tree* tree,
-    BuddyAllocator* b_alloc,
-    uint8_t* bm_buffer,
-    uint8_t* memory,
+BuddyAllocator* BuddyAllocator_init(
+    uint8_t* ba_buffer,
     DATA_MAX buffer_size,
-    DATA_MAX num_levels  ){
+    DATA_MAX num_levels){
+
+    BuddyAllocator* b_alloc = (BuddyAllocator*)ba_buffer;
+    uint8_t* tree_buff = ((uint8_t*)b_alloc) + sizeof(BuddyAllocator);
+    DATA_MAX tree_mem_size = pow(2, num_levels)+sizeof(BitMap)+sizeof(BitMap_tree);
+    BitMap_tree* tree = BitMap_tree_init(tree_buff, tree_mem_size ,num_levels);
 
     // we need enough memory to handle internal structures
     assert (buffer_size>=BuddyAllocator_calcSize(num_levels));
 
+    const DATA_MAX balloc_mem_size = buffer_size-(sizeof(BuddyAllocator)+tree_mem_size);
+
     b_alloc->num_levels = num_levels;
-    b_alloc->memory = memory;
-
-    int list_items=1<<(num_levels+1); // maximum number of allocations, used to size the list
-    int list_alloc_size=list_items;
-
-    const DATA_MAX min_bucket_size = (buffer_size>>(num_levels));
-    
-    // the buffer for the list starts where the bitmap ends
-    uint8_t *list_start= memory;
-
-    b_alloc->min_bucket_size = min_bucket_size;
+    b_alloc->memory = tree+sizeof(BuddyAllocator)+tree_mem_size;
+    b_alloc->min_bucket_size = (balloc_mem_size>>(num_levels));;
     b_alloc->tree = tree;
-    b_alloc->buffer_size = buffer_size;
+    b_alloc->buffer_size = balloc_mem_size;
     b_alloc->num_items = 1<<(num_levels+1);
-    b_alloc->user_mem=buffer_size;
+    b_alloc->user_mem=balloc_mem_size;
     
     assert (num_levels<MAX_LEVELS);
 
-}
+    BuddyAllocator_printMetadata(b_alloc, F_WRITE);
 
-DATA_MAX BuddyAllocator_calcSize(DATA_MAX num_levels){
-    DATA_MAX num_items=(1<<(num_levels+1))-1;
-    DATA_MAX list_alloc_size = num_items;
-    return list_alloc_size;
+    return b_alloc;
+
 }
 
 void* BuddyAllocator_getBuddy(BuddyAllocator* b_alloc, DATA_MAX level){
@@ -106,12 +95,11 @@ BuddyAllocatorResult BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, void* it
         fclose(f);   
     }
 
+    //Error Handling
     if(tree_getBit(alloc->tree, idx)==FREE) 
         return BA_DoubleFree;
-
     if (offset%alloc->min_bucket_size)
         return BA_UnalignedFree;
-    
     if (idx<0 || idx>=alloc->num_items)
         return BA_OutOfRange;
 
@@ -122,7 +110,7 @@ BuddyAllocatorResult BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, void* it
     if(DEBUG) 
         tree_print(alloc->tree, F_CONCAT);
 
-    return Success;    
+    return BA_Success;    
 }
 
 void* BuddyAllocator_malloc(BuddyAllocator* alloc, DATA_MAX size){
@@ -148,12 +136,18 @@ void* BuddyAllocator_malloc(BuddyAllocator* alloc, DATA_MAX size){
 }
 
 void BuddyAllocator_free(BuddyAllocator* alloc, void* mem){
-    BuddyAllocatorResult res = BuddyAllocator_releaseBuddy(alloc, mem);
 
-    if(DEBUG){
-        FILE* f = fopen("OUT/Logs/log.txt", "a");
-        fprintf(f, "Result: %s", BuddyAllocator_strerror(res));
-        fclose(f);
+    //Checks if pointer is not null and calls release buddy
+    if(mem!=NULL){
+        BuddyAllocatorResult res = BuddyAllocator_releaseBuddy(alloc, mem);
+        if(DEBUG){
+            FILE* f = fopen("OUT/Logs/log.txt", "a");
+            fprintf(f, "Result: %s", BuddyAllocator_strerror(res));
+            fclose(f);
+        }
+    }else{
+        printf("[FREE][Error, NULL pointer]: exiting...\n");
+        assert(0);
     }
 
 }
@@ -202,4 +196,15 @@ void BuddyAllocator_printMetadata(BuddyAllocator* b_alloc, OUT_MODE out){
         fprintf(f, "\n----------------------------------------------------------------------------------------------\n");
         fclose(f);
     }
+}
+
+
+const char* BuddyAllocator_strerror(BuddyAllocatorResult result) {
+  return BuddyAllocator_strerrors[result];
+}
+
+DATA_MAX BuddyAllocator_calcSize(DATA_MAX num_levels){
+    DATA_MAX num_items=(1<<(num_levels+1))-1;
+    DATA_MAX list_alloc_size = num_items;
+    return list_alloc_size;
 }
