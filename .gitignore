@@ -1,3 +1,6 @@
 .vscode/dryrun.log
 .vscode/targets.log
-.vscode/configurationCache
+.vscode/configurationCache.log
+.vscode/launch.json
+.vscode/settings.json
+.vscode/tasks.json

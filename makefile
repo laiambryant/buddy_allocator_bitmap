@@ -1,49 +1,56 @@
-CCOPTS=-Wall -g -std=gnu99
-VGOPTS=--leak-check=full --show-leak-kinds=all  --track-origins=yes  --verbose 
+CCOPTS=-Wall -g -std=gnu99 
+VGOPTS=--leak-check=full --show-leak-kinds=all --track-origins=yes --verbose 
+GPROF_OPTS=-pg
 LIBS=-lm
 CC=gcc
-CC_GPROF = -pg
-CC_DUMP= -c
 
 OUT_DIR=OUT/
 LOG_DIR=OUT/Logs/
 BINS_DIR=OUT/Bins/
+DUMPS_DIR=OUT/Dumps/
 TEST_DIR=Tests/
 OBJS_DIR=OUT/Objs/
 ASM_DIR=OUT/ASM/
 
-BINS=$(BINS_DIR)BM_test $(BINS_DIR)Bud_test
+BINS= $(BINS_DIR)*
 
-buddy: 
-	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.* BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
+buddy: buddy.o
+	@echo "Linking objects..."
+	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.*  BuddyAllocator.* Bitmap_tree.* $(LIBS)
+	@echo "Running executable..."
 	./Bud_test
 	mv Bud_test $(BINS_DIR)
 
-buddy.o: 
-	$(CC) $(CCOPTS) $(CC_DUMP) Main.c Bitmap.*  BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
+buddy.o: buddy.s
+	@echo "Compiling Objects..."
+	$(CC) $(CCOPTS) -c $(ASM_DIR)*.s  $(LIBS)
 	mv *.o  $(OBJS_DIR)
 	rm -rf *.h.gch
 
 buddy.s:
-	$(CC) $(CCOPTS) -s Bitmap.*  BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
-	mv *.s $(ASM)
+	@echo "Generating assembly code..."
+	$(CC) $(CCOPTS) -S Main.c Bitmap.* BuddyAllocator.* Bitmap_tree.*  $(LIBS)
+	mv *.s $(ASM_DIR)
 	rm -rf *.h.gch
 
 buddyVG:
-	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.*  BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
+	@echo "Running valgrind on program..."
+	$(CC) $(CCOPTS) -o Bud_test Main.c Bitmap.*  BuddyAllocator.* Bitmap_tree.* $(LIBS)
 	valgrind $(VGOPTS)--log-file=bud-valgrind-out.txt \./Bud_test
 	mv bud-valgrind-out.txt  $(LOG_DIR)
 	mv Bud_test $(BINS_DIR)
 	rm -rf gmon.out 
 
 buddyGProf:
-	$(CC) $(CCOPTS) $(CC_GPROF) -o Bud_test Main.c Bitmap.* BuddyAllocator.* pool_allocator.* Bitmap_tree.* $(LIBS)
+	@echo "Running GProf on program..."
+	$(CC) $(CCOPTS) $(GPROF_OPTS) -o Bud_test Main.c Bitmap.* BuddyAllocator.* Bitmap_tree.* $(LIBS)
 	./Bud_test
 	gprof Bud_test gmon.out > Bud_TestGprof.txt
 	mv Bud_TestGprof.txt $(LOG_DIR)
 	rm -rf gmon.out Bud_test
 
 buddyDump: buddy.o
+	@echo "Generating memory dumps..."
 	objdump -d $(OBJS_DIR)Bitmap.o > Bitmap_dump.txt 
 	objdump -d $(OBJS_DIR)BuddyAllocator.o > Buddy_dump.txt 
 	objdump -d $(OBJS_DIR)Main.o > Main_dump.txt 
@@ -51,21 +58,28 @@ buddyDump: buddy.o
 	mv *.txt $(ASM_DIR)
 
 buddyDebugFull: buddyGProf buddyVG buddyDump
-
-BitmapTest:
-	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* pool_allocator.* Bitmap_tree.* $(LIBS)
-	./BM_test
-	mv BM_test $(BINS_DIR)
-
-BitmapVG:
-	$(CC) $(CCOPTS) -o BM_test $(TEST_DIR)Bitmap_test.c Bitmap.* pool_allocator.* Bitmap_tree.* $(LIBS)
-	valgrind $(VGOPTS)--log-file=bm-valgrind-out.txt \./BM_test
-	mv bm-valgrind-out.txt  $(OUT_DIR)
-	mv BM_test $(BINS_DIR)
-	rm -rf gmon.out
+	@echo "Full Debug..."
 
 dirSetup:
+	@echo "Setting up directories"
 	mkdir $(OUT_DIR) $(LOG_DIR) $(BINS_DIR) $(OBJS_DIR) $(ASM_DIR)
 
+BitmapTest:
+	@echo "Running Bitmap test..."
+	$(CC) $(CCOPTS) $(TEST_DIR)Bitmap_test.c Bitmap.* BuddyAllocator.*  Bitmap_tree.* $(LIBS)
+	mv a.out bm_test
+	./bm_test
+	mv bm_test $(BINS_DIR)
+	rm -rf *.h.gch
+
+InitTest:
+	@echo "Running init test..."
+	$(CC) $(CCOPTS) $(TEST_DIR)Init_test.c Bitmap.* BuddyAllocator.*  Bitmap_tree.* $(LIBS)
+	mv a.out init_test
+	./init_test
+	mv init_test $(BINS_DIR)
+	rm -rf *.h.gch
+
 clean:
-	rm -rf *.o Bud_test *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS) $(LOG_DIR)*.txt $(OBJS_DIR)*.o $(OBJS_DIR)*.h.gch $(ASM_DIR)*.txt
+	@echo "Cleaning..."
+	rm -rf *.o *.txt *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS) $(OBJS_DIR)*.o $(LOG_DIR)*.txt $(ASM_DIR)*.s $(BINS_DIR)a.out a.out.dSYM
