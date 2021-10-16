@@ -82,4 +82,4 @@ InitTest:
 
 clean:
 	@echo "Cleaning..."
-	rm -rf *.o *.txt *.h.gch $(OUT_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS) $(OBJS_DIR)*.o $(LOG_DIR)*.txt $(ASM_DIR)*.s $(BINS_DIR)a.out a.out.dSYM
+	rm -rf *.o *.txt *.h.gch $(ASM_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS) $(OBJS_DIR)*.o $(LOG_DIR)*.txt $(ASM_DIR)*.s $(BINS_DIR)a.out a.out.dSYM

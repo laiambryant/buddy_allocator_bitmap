@@ -33,9 +33,7 @@ The docs will be structured in 4 parts:
     
   9. <code> make InitTest </code> compiles and runs using the main in Tests/Init_test.c
     
-  10. <code> make OSXDebug </code> debugs program through lldb, (only in M1 branch) 
-
-  11. <code> make clean </code> removes executable, objects, precompiled headers and ouput of other tests. 
+  10. <code> make clean </code> removes executable, objects, precompiled headers and ouput of other tests. 
     
 
 

@@ -3,10 +3,10 @@
 #include <stdio.h>
 
 
-#define BUF_SIZE 1024*8  // 1 KByte Bitmap
+#define BUF_SIZE 2048  // 1 KByte Bitmap
 #define MEM_SIZE (BUF_SIZE + sizeof(BitMap)) //Only 1 bitmap to save
 
-#define LEVELS 13
+#define LEVELS 11
 
 uint8_t buffer[MEM_SIZE];
 uint8_t memory[BUF_SIZE];

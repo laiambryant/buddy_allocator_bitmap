@@ -1,12 +1,12 @@
 #include "BuddyAllocator.h"
 #include <string.h>
 
-#define LEVELS 9
-#define BM_BUF_SIZE 512 //pow(2, LEVELS)
-#define BM_SIZE BM_BUF_SIZE + sizeof(BitMap) + sizeof(BitMap_tree)//Only 1 bitmap to save
+#define LEVELS 10
+#define BM_BUF_SIZE 1024 //must be greater than pow(2, LEVELS)
+#define BM_SIZE BM_BUF_SIZE + sizeof(BitMap) + sizeof(BitMap_tree)
 
 //Buffer for Buddy allocator
-#define BALLOC_MEM_SIZE 1024*1024 //1Mbit Memory Idxable
+#define BALLOC_MEM_SIZE 2*1024*1024 //1Mbit Memory Idxable
 #define BALLOC_SIZE BALLOC_MEM_SIZE+sizeof(BuddyAllocator)+BM_SIZE
 uint8_t BA_memory[BALLOC_SIZE];
 
@@ -22,7 +22,7 @@ int main(int argc, char const *argv[])
         
     int* var_ptr = (int*) BuddyAllocator_malloc(b_alloc,30000);
     
-    for (int i = 0; i<100; i++) {
+    for (int i = 0; i<450; i++) {
         int* mem = (int*)BuddyAllocator_malloc(b_alloc,100);
     }   
 

@@ -41,10 +41,10 @@ DATA_MAX tree_node_level_offset(BitMap_tree* tree, DATA_MAX idx){
     return tree_first_node_level(tree, tree_level(tree, idx))-idx;
 }
 DATA_MAX tree_getbuddy(DATA_MAX idx){
-    return (idx & 0x0001)?(idx-1):(idx);
+    return (idx & 0x0001)?(idx-1):(idx); //checks if even or odd
 }
 DATA_MAX tree_getparent(DATA_MAX idx){
-    return (uint16_t)idx/2;
+    return (DATA_MAX)idx/2;
 }
 DATA_MAX tree_buddiesOnLevel(BitMap_tree *tree, DATA_MAX level){
     DATA_MAX start_idx = pow(2, level);

@@ -27,7 +27,7 @@ BuddyAllocator* BuddyAllocator_init(
     
     assert (num_levels<MAX_LEVELS);
 
-    BuddyAllocator_printMetadata(b_alloc, F_WRITE);
+    if(DEBUG)BuddyAllocator_printMetadata(b_alloc, F_WRITE);
 
     return b_alloc;
 
