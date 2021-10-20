@@ -49,6 +49,14 @@ InitTest:
 	mv bm_test $(BINS_DIR)
 	rm -rf *.h.gch
 
+ConsistTest:
+	@echo "Running init test..."
+	$(CC) $(CCOPTS) $(TEST_DIR)Mem_consist_test.c Bitmap.* BuddyAllocator.*  Bitmap_tree.* $(LIBS)
+	mv a.out bm_test
+	./bm_test
+	mv bm_test $(BINS_DIR)
+	rm -rf *.h.gch
+
 OSX_buddyDebug: buddy
 	@echo "Running OSX debugging... give access to folder"
 	sudo $(DEBUGGER) $(BINS_DIR)a.out $(DBOPTS) > $(LOG_DIR)debug.txt

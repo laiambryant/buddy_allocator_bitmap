@@ -1,7 +1,6 @@
 #include "BuddyAllocator.h"
 #define DEBUG 1
 
-
 BuddyAllocator* BuddyAllocator_init(
     uint8_t* ba_buffer,
     DATA_MAX buffer_size,
@@ -53,7 +52,6 @@ void* BuddyAllocator_getBuddy(BuddyAllocator* b_alloc, DATA_MAX level){
         */
         DATA_MAX idx = tree_balloc_getIdx(b_alloc->tree, level);
         if(idx==0) return 0;
-
         //Calculates offset
         offset = b_alloc->min_bucket_size * (b_alloc->num_levels-level) * (idx-(tree_first_node_level(b_alloc->tree, idx)));
         void* ret = (void*) b_alloc->memory + offset;
@@ -129,6 +127,7 @@ void* BuddyAllocator_malloc(BuddyAllocator* alloc, DATA_MAX size){
     //If getBuddy does not find buddy it will return 0x0 as an address so we will exit
     if(buddy_ptr==0x0){
         printf("Malloc: %s\n", BuddyAllocator_strerror(BA_NotEnoughMemory));
+        
         assert(buddy_ptr!=0x0);
     }
 

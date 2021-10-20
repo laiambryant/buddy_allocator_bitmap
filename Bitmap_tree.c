@@ -140,7 +140,7 @@ DATA_MAX tree_free_buddies_on_level(BitMap_tree* tree, DATA_MAX level){
 
 DATA_MAX tree_balloc_getIdx(BitMap_tree* tree, DATA_MAX level){
     DATA_MAX start_idx = pow(2, level);
-    DATA_MAX end_idx = pow(2, level+1)-1;
+    DATA_MAX end_idx = pow(2, level+1);
     for(int i = start_idx; i<end_idx; i++){
         if(tree_getBit(tree, i)==FREE){
             tree_setParents(tree, level, i, ALLOCATED);
