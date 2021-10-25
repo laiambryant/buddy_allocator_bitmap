@@ -11,30 +11,21 @@ The docs will be structured in 4 parts:
   4. Error Handling
 
 ## How to run the tests on the allocator
-  I made a very simple makefile to handle all compiling purposes. Before running run <code> make dirSetup </code> to setup the directories.
-  <br><br>
-  There are 4 make commands:
+  I made a very simple makefile to handle all compiling purposes. There are 4 make commands:
     
   1. <code> make buddy </code> links object files, dependancy on make buddy.o, and runs it
     
-  2. <code> make buddy.o </code> assembles object files dependancy on buddy.s
+  2. <code> make buddy.o </code> compiles object files dependancy on buddy.s
     
-  3. <code> make buddy.s </code> compiles assembly code
+  3. <code> make buddy.s </code> generates assembly code
     
-  4. <code> make buddyGProf </code> compiles with GProf flag and runs executable. Runs gprof on the Gmon and moves the output to the OUT/Logs sub-directory
-
-  5. <code> make buddyVG </code> compiles with Valgrind flag and runs program then runs valgrind on the executable and moves log file to the OUT/Logs sub-directory
-
-  6. <code> make buddyDump </code> runs make buddy.o command and objdump on objects then moves dumps to the OUT/ASM sub-directory
-
-  7. <code> make buddyDebugFull </code> runs <code>make buddyVG </code>, <code>make BuddyDump </code> and <code>make BuddyGProf </code>
+  4. <code> make buddyGProf </code> compiles with GProf options and runs program. Runs gprof on the Gmon and moves the output to the OUT sub-directory
     
-  8. <code> make BitmapTest </code> compiles and runs using the main in Tests/Bitmap_test.c
+  5. <code> make BitmapTest </code> compiles and runs using the main in Tests/Bitmap_test.c
     
-  9. <code> make InitTest </code> compiles and runs using the main in Tests/Init_test.c
+  6. <code> make OSXDebug </code> debugs program through lldb, (only in M1 branch)
     
-  10. <code> make clean </code> removes executable, objects, precompiled headers and ouput of other tests. 
-    
+  7. <code> make clean </code> removes executable, objects, precompiled headers and ouput of other tests.
 
 
 ## Explanation of how the allocator works

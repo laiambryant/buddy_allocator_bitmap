@@ -80,6 +80,15 @@ InitTest:
 	mv init_test $(BINS_DIR)
 	rm -rf *.h.gch
 
+
+ConsistTest:
+	@echo "Running init test..."
+	$(CC) $(CCOPTS) $(TEST_DIR)Mem_consist_test.c Bitmap.* BuddyAllocator.*  Bitmap_tree.* $(LIBS)
+	mv a.out bm_test
+	./bm_test
+	mv bm_test $(BINS_DIR)
+	rm -rf *.h.gch
+
 clean:
 	@echo "Cleaning..."
 	rm -rf *.o *.txt *.h.gch $(ASM_DIR)*.txt $(DUMPS_DIR)*.txt $(BINS) $(OBJS_DIR)*.o $(LOG_DIR)*.txt $(ASM_DIR)*.s $(BINS_DIR)a.out a.out.dSYM

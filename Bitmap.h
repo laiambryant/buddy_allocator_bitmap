@@ -1,5 +1,4 @@
 #pragma once
-
 #include <assert.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -40,5 +39,5 @@ DATA_MAX BitMap_setBit(BitMap *bit_map,  DATA_MAX bit_num, Status status);
 // inspects the status of the bit bit_num
 uint8_t BitMap_getBit( BitMap *bit_map,  DATA_MAX bit_num);
 
-//Prints Bitmap with one of 3 out modes: STDOUT, F_WRITE, F_CONCAT.
+//Prints Bitmap
 void Bitmap_print(BitMap *bit_map, OUT_MODE out_mode);

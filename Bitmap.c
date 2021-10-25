@@ -27,7 +27,7 @@ BitMap* BitMap_init(uint8_t *buffer, DATA_MAX buf_size){
 DATA_MAX BitMap_setBit(BitMap *bit_map, DATA_MAX bit_num, Status status){
     if(bit_num<0) return 0;
     DATA_MAX page = bit_num>>3;
-    assert(page<=bit_map->buffer_size);
+    //assert(page<bit_map->buffer_size);
     DATA_MAX offset =  bit_num %8;
     if(status==ALLOCATED) 
         bit_map->Buf[page] |= (1U<<offset);

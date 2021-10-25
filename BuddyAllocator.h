@@ -54,5 +54,5 @@ BuddyAllocatorResult BuddyAllocator_releaseBuddy(BuddyAllocator* alloc, void* it
 void* BuddyAllocator_malloc(BuddyAllocator* alloc, DATA_MAX size);
 //Calls releaseBuddy to free memory pointed by mem address 
 void BuddyAllocator_free(BuddyAllocator* alloc, void* mem);
-//Prints metadata for buddy allocator with one of 3 out modes: STDOUT, F_WRITE, F_CONCAT.
+//Prints metadata for buddy allocator
 void BuddyAllocator_printMetadata(BuddyAllocator* alloc, OUT_MODE out);

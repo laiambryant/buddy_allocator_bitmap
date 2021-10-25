@@ -41,10 +41,10 @@ DATA_MAX tree_node_level_offset(BitMap_tree* tree, DATA_MAX idx){
     return tree_first_node_level(tree, tree_level(tree, idx))-idx;
 }
 DATA_MAX tree_getbuddy(DATA_MAX idx){
-    return (idx & 0x0001)?(idx-1):(idx); //checks if even or odd
+    return (idx & 0x0001)?(idx-1):(idx);
 }
 DATA_MAX tree_getparent(DATA_MAX idx){
-    return (DATA_MAX)idx/2;
+    return (uint16_t)idx/2;
 }
 DATA_MAX tree_buddiesOnLevel(BitMap_tree *tree, DATA_MAX level){
     DATA_MAX start_idx = pow(2, level);
@@ -140,7 +140,7 @@ DATA_MAX tree_free_buddies_on_level(BitMap_tree* tree, DATA_MAX level){
 
 DATA_MAX tree_balloc_getIdx(BitMap_tree* tree, DATA_MAX level){
     DATA_MAX start_idx = pow(2, level);
-    DATA_MAX end_idx = pow(2, level+1)-1;
+    DATA_MAX end_idx = pow(2, level+1);
     for(int i = start_idx; i<end_idx; i++){
         if(tree_getBit(tree, i)==FREE){
             tree_setParents(tree, level, i, ALLOCATED);

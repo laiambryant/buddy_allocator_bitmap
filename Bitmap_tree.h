@@ -46,7 +46,7 @@ If status is ALLOCATED, sets all parents*/
 void tree_setParents(BitMap_tree* tree, DATA_MAX idx, DATA_MAX level, Status status);
 //Calls internal method tree_setChildren_internal and sets all children.
 void tree_setChildren(BitMap_tree* tree, DATA_MAX idx, Status status);
-//Internal recursive function to sete all children
+//Internal recursive func 
 void tree_setChildren_internal(BitMap_tree* tree, DATA_MAX l_child, DATA_MAX r_child, Status status);
 //Wrapper function for bitmap_setBit
 void tree_setBit(BitMap_tree *tree, DATA_MAX bit_num, Status status);
