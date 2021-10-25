@@ -64,3 +64,6 @@ Various sources:<br><br>
 https://stackoverflow.com/questions/29071093/how-to-map-bits-from-a-bitmap-to-physical-pages-in-a-buddy-allocator<br><br>
 https://eatplayhate.me/2010/09/04/memory-management-from-the-ground-up-2-foundations/<br><br>
 https://gitlab.com/grisetti/sistemi_operativi_2020_21/-/blob/master/slides/os_06_memory_allocators.pdf
+
+
+## Possible extensions

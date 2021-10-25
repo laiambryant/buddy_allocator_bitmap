@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdio.h>
 
-#define LEVELS 9
-#define BM_BUF_SIZE 512 //pow(2, LEVELS)
+#define LEVELS 10
+#define BM_BUF_SIZE 1024 //pow(2, LEVELS)
 #define BM_SIZE BM_BUF_SIZE + sizeof(BitMap) + sizeof(BitMap_tree)//Only 1 bitmap to save
 
 //Buffer for Buddy allocator
@@ -11,9 +11,13 @@
 #define BALLOC_SIZE BALLOC_MEM_SIZE+sizeof(BuddyAllocator)+BM_SIZE
 uint8_t BA_memory[BALLOC_SIZE];
 
+//Allocates until allocator is full and asks for one extra chunk of memory
 void createError_BA_NotEnoughMemory(BuddyAllocator *b_alloc);
+//Allocates a chunk of memory and asks to free wrong address
 void createError_BA_UnalignedFree(BuddyAllocator *b_alloc);
+//Allocates untill allocator is full, takes last addr and tries to free a subsequent address
 void createError_BA_OutOfRange(BuddyAllocator *b_alloc);
+//Allocates a chunk of memory, frees it and tries to free same address a second time
 void createError_BA_DoubleFree(BuddyAllocator *b_alloc);
 
 int main(int argc, char const *argv[]){
