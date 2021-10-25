@@ -42,7 +42,7 @@ uint8_t BitMap_getBit(BitMap *bit_map, DATA_MAX bit_num){
     if(page>bit_map->buffer_size){
         printf("[Page]: %d\t[Buffer size]: %d\t [Bit]: %d\n", page, bit_map->buffer_size, bit_num);
     }
-    assert(page<bit_map->buffer_size);
+    //assert(page<bit_map->buffer_size);
     DATA_MAX offset =  bit_num %8;
     return (bit_map->Buf[page] & (1U<<offset))!=0; 
 }

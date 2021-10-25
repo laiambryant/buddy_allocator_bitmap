@@ -1,11 +1,10 @@
 #include "../BuddyAllocator.h"
 #include <string.h>
 
+
 #define LEVELS 9
-//Buffer for bitmap
-#define BM_BUF_SIZE 512// 512 bit Bitmap
+#define BM_BUF_SIZE 512 //pow(2, LEVELS)
 #define BM_SIZE BM_BUF_SIZE + sizeof(BitMap) + sizeof(BitMap_tree)//Only 1 bitmap to save
-uint8_t BM_buffer[BM_SIZE];
 
 //Buffer for Buddy allocator
 #define BALLOC_MEM_SIZE 1024*1024 //1Mbit Memory Idxable
@@ -13,9 +12,6 @@ uint8_t BM_buffer[BM_SIZE];
 uint8_t BA_memory[BALLOC_SIZE];
 
 int main(int argc, char const *argv[]){
-    BitMap_tree *tree = BitMap_tree_init(BM_buffer, BM_SIZE, LEVELS);
-    printf("Addr: %p\n", tree);
-    tree_print(tree, F_WRITE);
 
     BuddyAllocator *b_alloc = BuddyAllocator_init(
         BA_memory, 
@@ -23,17 +19,23 @@ int main(int argc, char const *argv[]){
         LEVELS
     );
 
-    DATA_MAX* ptrs[256];
+    DATA_MAX* ptrs[BM_BUF_SIZE/2];
 
-    for (int i=0; i<256; i++){
+    for (int i=0; i<BM_BUF_SIZE/2; i++){
         ptrs[i] = (DATA_MAX*)BuddyAllocator_malloc(b_alloc, 100);
         *ptrs[i] = i; 
     }
 
-    for(int j=0; j<256; j++){
+    for(int j=0; j<BM_BUF_SIZE/2; j++){
         printf("%d\t", *ptrs[j]);
     }
     printf("\n");
   
+    int sum = 0;
+    for(int k=0; k<BM_BUF_SIZE/2; k++){
+        sum += *ptrs[k];
+    }
+    printf("Sum:%d\n", sum);
+
     return 0;
 }

@@ -22,10 +22,14 @@ The docs will be structured in 4 parts:
   4. <code> make buddyGProf </code> compiles with GProf options and runs program. Runs gprof on the Gmon and moves the output to the OUT sub-directory
     
   5. <code> make BitmapTest </code> compiles and runs using the main in Tests/Bitmap_test.c
+
+  6. <code> make Errors_test_(ERRNAME) </code> 4 tests run program using main in Tests/Errors_test.c (ERRNAME should be one of the following 4: noMem, unalignedFree, outOfRange, doubleFree) noMem will exit program with an assertion and others will give errors in the log file-
+
+  7. <code> make ConsistTest</code> compiles and runs program using main in Tests/Mem_consist_test.c to test memory consistency.
+
+  8. <code> make OSXDebug </code> debugs program through lldb, (only in M1 branch)
     
-  6. <code> make OSXDebug </code> debugs program through lldb, (only in M1 branch)
-    
-  7. <code> make clean </code> removes executable, objects, precompiled headers and ouput of other tests.
+  9. <code> make clean </code> removes executable, objects, precompiled headers and ouput of other tests.
 
 
 ## Explanation of how the allocator works

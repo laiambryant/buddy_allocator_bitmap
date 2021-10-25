@@ -84,9 +84,44 @@ InitTest:
 ConsistTest:
 	@echo "Running init test..."
 	$(CC) $(CCOPTS) $(TEST_DIR)Mem_consist_test.c Bitmap.* BuddyAllocator.*  Bitmap_tree.* $(LIBS)
-	mv a.out bm_test
-	./bm_test
-	mv bm_test $(BINS_DIR)
+	mv a.out consist_test
+	./consist_test
+	mv consist_test $(BINS_DIR)
+	rm -rf *.h.gch
+
+Errors_test_noMem: clean
+	@echo "Running Error (No mem) test..."
+	$(CC) $(CCOPTS) $(TEST_DIR)Errors_test.c Bitmap.* BuddyAllocator.*  Bitmap_tree.* $(LIBS)
+	mv a.out err_test
+	./err_test 1
+	mv err_test $(BINS_DIR)
+	rm -rf *.h.gch
+
+
+Errors_test_outOfRange: clean
+	@echo "Running Error (Out Of Range free) test..."
+	$(CC) $(CCOPTS) $(TEST_DIR)Errors_test.c Bitmap.* BuddyAllocator.*  Bitmap_tree.* $(LIBS)
+	mv a.out err_test
+	./err_test 2
+	mv err_test $(BINS_DIR)
+	rm -rf *.h.gch
+
+
+Errors_test_unalignedFree: clean
+	@echo "Running Error (Unaligned free) test..."
+	$(CC) $(CCOPTS) $(TEST_DIR)Errors_test.c Bitmap.* BuddyAllocator.*  Bitmap_tree.* $(LIBS)
+	mv a.out err_test
+	./err_test 3
+	mv err_test $(BINS_DIR)
+	rm -rf *.h.gch
+
+
+Errors_test_doubleFree: clean
+	@echo "Running Error (Double Freee) test..."
+	$(CC) $(CCOPTS) $(TEST_DIR)Errors_test.c Bitmap.* BuddyAllocator.*  Bitmap_tree.* $(LIBS)
+	mv a.out err_test
+	./err_test 4
+	mv err_test $(BINS_DIR)
 	rm -rf *.h.gch
 
 clean:

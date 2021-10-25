@@ -15,6 +15,7 @@ typedef struct  BuddyAllocator{
     DATA_MAX user_mem;
     DATA_MAX min_bucket_size;
     DATA_MAX num_items;
+    DATA_MAX leaf_num;
     BitMap_tree* tree;
     uint8_t* memory;
 } BuddyAllocator;

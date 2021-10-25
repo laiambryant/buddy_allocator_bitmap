@@ -19,8 +19,7 @@ BitMap_tree* BitMap_tree_init(uint8_t* buffer, DATA_MAX buffer_size, DATA_MAX le
 }
 
 DATA_MAX tree_level(BitMap_tree* tree, DATA_MAX idx){
-    //2^level=node_idx => floor(log_2(node_idx)) = level
-    DATA_MAX ret = floor(log2(idx)); 
+    DATA_MAX ret = (int)floor(log2(idx)); 
     if(ret>tree->levels)return tree->levels-1;
     if(ret>=0) return ret;
     else return 0;
@@ -29,8 +28,6 @@ DATA_MAX tree_first_node_level(BitMap_tree* tree,DATA_MAX idx){
     return ((0x01<<tree_level(tree, idx)));
 }
 DATA_MAX tree_first_free_node_level(BitMap_tree* tree,DATA_MAX level){
-    //Returns -1 if no free nodes on level
-
     DATA_MAX start = pow(2, level); DATA_MAX end = pow(2, level+1);
     for(DATA_MAX i=start;i<end;i++){
         if(tree_getBit(tree, i)==FREE) return i;
@@ -64,7 +61,7 @@ void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
         fprintf(f, "%p start\t%p end\n", tree->BitMap->Buf, tree->BitMap->end_Buf);
         for (int i = 0; i < tree->levels; i++){
             fprintf(f,"Level %d: %d buddies\t",i, tree_buddiesOnLevel(tree, i));
-            fprintf(f,"LVL first idx = : %.f, last idx: %.f \t", pow(2, i), pow(2,i+1));
+            fprintf(f,"LVL first idx = : %.f, last idx: %.f \t", pow(2, i), pow(2,i+1)-1);
             fprintf(f,"First_free: %d\n",tree_first_free_node_level(tree, i));  
         }
         fprintf(f, "\n");
@@ -85,7 +82,7 @@ void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
         fprintf(stdout, "%p start\t%p end\n", tree->BitMap->Buf, tree->BitMap->end_Buf);
         for (int i = 0; i < tree->levels; i++){
             fprintf(stdout,"Level %d: %d buddies\t",i, tree_buddiesOnLevel(tree, i));
-            fprintf(stdout,"LVL first idx = : %.f, last idx: %.f \t", pow(2, i), pow(2,i+1));
+            fprintf(stdout,"LVL first idx = : %.f, last idx: %.f \t", pow(2, i), pow(2,i+1)-1);
             fprintf(stdout,"First_free: %d\n",tree_first_free_node_level(tree, i));
         }
         fprintf(stdout,"\n");
@@ -106,7 +103,7 @@ void tree_print(BitMap_tree *tree, OUT_MODE out_mode){
         fprintf(f, "%p start\t%p end\n", tree->BitMap->Buf, tree->BitMap->end_Buf);
         for (int i = 0; i < tree->levels; i++){
             fprintf(f,"Level %d: %d buddies\t",i, tree_buddiesOnLevel(tree, i));
-            fprintf(f,"LVL first idx = : %.f, last idx: %.f \t", pow(2, i), pow(2,i+1));
+            fprintf(f,"LVL first idx = : %.f, last idx: %.f \t", pow(2, i), pow(2,i+1)-1);
             fprintf(f,"First_free: %d\n",tree_first_free_node_level(tree, i));
         }
         fprintf(f,"\n");
