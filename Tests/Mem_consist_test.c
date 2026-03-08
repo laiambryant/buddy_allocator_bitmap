@@ -1,41 +1,37 @@
 #include "../BuddyAllocator.h"
-#include <string.h>
-
+#include <assert.h>
 
 #define LEVELS 9
-#define BM_BUF_SIZE 512 //pow(2, LEVELS)
-#define BM_SIZE BM_BUF_SIZE + sizeof(BitMap) + sizeof(BitMap_tree)//Only 1 bitmap to save
+#define BM_BUF_SIZE (1 << LEVELS)
+#define BM_SIZE (BM_BUF_SIZE + sizeof(BitMap) + sizeof(BitMap_tree))
+#define BALLOC_MEM_SIZE (1024 * 1024)
+#define BALLOC_SIZE (BALLOC_MEM_SIZE + sizeof(BuddyAllocator) + BM_SIZE)
+#define ALLOC_COUNT 32
+#define ALLOC_SIZE 100
 
-//Buffer for Buddy allocator
-#define BALLOC_MEM_SIZE 1024*1024 //1Mbit Memory Idxable
-#define BALLOC_SIZE BALLOC_MEM_SIZE+sizeof(BuddyAllocator)+BM_SIZE
 uint8_t BA_memory[BALLOC_SIZE];
 
-int main(int argc, char const *argv[]){
-
-    BuddyAllocator *b_alloc = BuddyAllocator_init(
-        BA_memory, 
-        BALLOC_SIZE,
-        LEVELS
-    );
-
-    DATA_MAX* ptrs[BM_BUF_SIZE/2];
-
-    for (int i=0; i<BM_BUF_SIZE/2; i++){
-        ptrs[i] = (DATA_MAX*)BuddyAllocator_malloc(b_alloc, 100);
-        *ptrs[i] = i; 
+int main(void) {
+    memset(BA_memory, 0, BALLOC_SIZE);
+    BuddyAllocator *b_alloc = BuddyAllocator_init(BA_memory, BALLOC_SIZE, LEVELS);
+    DATA_MAX* ptrs[ALLOC_COUNT];
+    for (int i = 0; i < ALLOC_COUNT; i++) {
+        ptrs[i] = (DATA_MAX*)BuddyAllocator_malloc(b_alloc, ALLOC_SIZE);
+        assert(ptrs[i] != NULL);
+        *ptrs[i] = i;
     }
-
-    for(int j=0; j<BM_BUF_SIZE/2; j++){
-        printf("%d\t", *ptrs[j]);
+    int expected_sum = 0;
+    for (int i = 0; i < ALLOC_COUNT; i++) {
+        expected_sum += i;
     }
-    printf("\n");
-  
-    int sum = 0;
-    for(int k=0; k<BM_BUF_SIZE/2; k++){
-        sum += *ptrs[k];
+    int actual_sum = 0;
+    for (int i = 0; i < ALLOC_COUNT; i++) {
+        assert(*ptrs[i] == i);
+        actual_sum += *ptrs[i];
     }
-    printf("Sum:%d\n", sum);
-
+    assert(actual_sum == expected_sum);
+    for (int i = 0; i < ALLOC_COUNT; i++) {
+        BuddyAllocator_free(b_alloc, ptrs[i]);
+    }
     return 0;
 }

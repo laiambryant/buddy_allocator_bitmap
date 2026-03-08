@@ -1,32 +1,21 @@
 #include "../BuddyAllocator.h"
-#include <string.h>
+#include <assert.h>
 
-#define LEVELS 11
-//Buffer for bitmap
-#define BM_BUF_SIZE 2048// 512 bit Bitmap
-#define BM_SIZE BM_BUF_SIZE + sizeof(BitMap) + sizeof(BitMap_tree)//Only 1 bitmap to save
-uint8_t BM_buffer[BM_SIZE];
+#define LEVELS 9
+#define BM_BUF_SIZE (1 << LEVELS)
+#define BM_SIZE (BM_BUF_SIZE + sizeof(BitMap) + sizeof(BitMap_tree))
+#define BALLOC_MEM_SIZE (1024 * 1024)
+#define BALLOC_SIZE (BALLOC_MEM_SIZE + sizeof(BuddyAllocator) + BM_SIZE)
 
-//Buffer for Buddy allocator
-#define BALLOC_MEM_SIZE 1024*1024 //1Mbit Memory Idxable
-#define BALLOC_SIZE BALLOC_MEM_SIZE+sizeof(BuddyAllocator)+BM_SIZE
 uint8_t BA_memory[BALLOC_SIZE];
 
-int main(int argc, char const *argv[]){
-    BitMap_tree *tree = BitMap_tree_init(BM_buffer, BM_SIZE, LEVELS);
-    printf("Addr: %p\n", tree);
-    tree_print(tree, F_WRITE);
-
-    BuddyAllocator *b_alloc = BuddyAllocator_init(
-        BA_memory, 
-        BALLOC_SIZE,
-        LEVELS
-    );
-
-    printf("Addr: %p\n", b_alloc);
-    
-    //Allocates all mem buffer at once
-    BuddyAllocator_malloc(b_alloc, b_alloc->user_mem);
-
+int main(void) {
+    memset(BA_memory, 0, BALLOC_SIZE);
+    BuddyAllocator *b_alloc = BuddyAllocator_init(BA_memory, BALLOC_SIZE, LEVELS);
+    assert(b_alloc != NULL);
+    assert(b_alloc->num_levels == LEVELS);
+    void *ptr = BuddyAllocator_malloc(b_alloc, b_alloc->user_mem / 2);
+    assert(ptr != NULL);
+    BuddyAllocator_free(b_alloc, ptr);
     return 0;
 }
