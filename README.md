@@ -1,69 +1,72 @@
 # buddy_allocator_bitmap
 
-This is my project for my Operating Systems Course in University La Sapienza. It extends and modifies an implementation of a buddy allocator you can find at the following link: *https://gitlab.com/grisetti/sistemi_operativi_2020_21/-/tree/master/source/06_memory_allocation/buddy_allocator*.
+A buddy memory allocator backed by a bitmap tree, written in C. Developed as an extension of a reference implementation from the Operating Systems course at Sapienza University of Rome.
 
-This implementations of a buddy allocator uses a bitmap for bookkeeping 
+## Building
 
-The docs will be structured in 4 parts:
-  1. How to run the tests on the allocator
-  2. Explaination of how the allocator works
-  3. Choices made while making the allocator
-  4. Error Handling
+A fresh clone requires no manual setup. All output directories are created automatically by the build system.
 
-## How to run the tests on the allocator
-  I made a very simple makefile to handle all compiling purposes. There are 4 make commands:
-    
-  1. <code> make buddy </code> links object files, dependancy on make buddy.o, and runs it
-    
-  2. <code> make buddy.o </code> compiles object files dependancy on buddy.s
-    
-  3. <code> make buddy.s </code> generates assembly code
-    
-  4. <code> make buddyGProf </code> compiles with GProf options and runs program. Runs gprof on the Gmon and moves the output to the OUT sub-directory
-    
-  5. <code> make BitmapTest </code> compiles and runs using the main in Tests/Bitmap_test.c
+```sh
+make buddy        # build and run the demo
+make test         # build and run all tests
+make buddyVG      # run under Valgrind
+make buddyGProf   # profile with gprof
+make clean        # remove all build artifacts
+```
 
-  6. <code> make Errors_test_(ERRNAME) </code> 4 tests run program using main in Tests/Errors_test.c (ERRNAME should be one of the following 4: noMem, unalignedFree, outOfRange, doubleFree) noMem will exit program with an assertion and others will give errors in the log file-
+To enable debug output (prints allocator state to stdout on every malloc/free):
 
-  7. <code> make ConsistTest</code> compiles and runs program using main in Tests/Mem_consist_test.c to test memory consistency.
+```sh
+make buddy CCOPTS="-Wall -Wextra -g -std=gnu99 -DDEBUG=1"
+```
 
-  8. <code> make OSXDebug </code> debugs program through lldb, (only in M1 branch)
-    
-  9. <code> make clean </code> removes executable, objects, precompiled headers and ouput of other tests.
+## How it works
 
+The allocator manages a flat byte buffer using a **bitmap-backed binary tree** for bookkeeping. Memory is partitioned into power-of-two-sized regions ("buddies") at successive levels of a complete binary tree. Each level `l` occupies indices `[2^l, 2^(l+1) - 1]` in the bitmap.
 
-## Explanation of how the allocator works
-The allocator works as a typical buddy allocator: memory is partitioned in half until the size of the partition is the smallest possible to satisfy the memory request. Should we have a buffer of 1MB for example and should we receive a request for 100 kB of memory, memory will be divided into two 512 kB partitions, then two 256 kB partitions and finally into two 128 kB partitions. Successive partitioning would make the memory returned too small so the chosen “level” is the 4th. The partitioning is abstract in this implementation: we will have a bitmap representation of a tree that will help in finding the address that has to be returned to the user in order to satisfy the memory request and the memory pointed by the address will be preceded by the index of the item in the tree.<br><br>
-Each level starts with index 2^level of the Bitmap and ends with index (2^(level+1)-1). Every time the allocator gets a request through <code>BuddyAllocator_malloc</code>, it calculates the smallest possible level to serve the request and returns the first free memory segment for that level. Once it has found the index the allocator goes both up and down the tree and sets all bits corresponding to parent nodes and children nodes. When memory is released with <code>BuddyAllocator_free</code>, the allocator looks for the index of that node in the 4 bits preceding the address. Subsequently children are all freed and parents are freed, but only if buddy of the item is also free. 
-Respectively in BuddyAllocator.c, Bitmap.c, Bitmap_tree.c. Bitmap_print and tree_print have 3 output modes: STDOUT that prints debugging info on stdout, F_WRITE that prints on a new file (uses <code>fprintf</code> with "w" flag), F_CONCAT that concats debugging info to an existing file (uses <code>fprintf</code> with "a" flag). 
-The allocator buffer is structured in the following way: First we have the Buddyallocator struct, then the Bitmap_tree struct, then the Bitmap Struct followed by the actual bitmap. <br><br>After these first 3 structs we have the memory that can be allocated. Each allocated part of the memory will include, stored in the first 4 bytes of the memory segment, the index it would have in the bitmap. This is done to aid the free function that needs the index of the object to work: <br>
-For example if my memory starts at address 0x0004 and the user asks to free address 0x0004 that address could have been returned by a malloc function that requests the whole memory or by a malloc that requests a small amount of bytes at a lower level. We have included the index that item would have in the tree for this exact situation: allocator reads address 0x0004, goes to address 0x0004 - <code>sizeof(index)</code>  and reads the index.  <br><br>
-By storing the index associated to that address we can find all data associated to that memory segment (for example the size, level, end of memory segment etc.) inspecting the tree. 
-Last choice made was to not use the pool allocator, because it took little to no effort to remove it.
+On `BuddyAllocator_malloc(size)`:
+1. The smallest level whose block size can fit `size` is calculated.
+2. The first free node at that level is found and its index is written into the first 4 bytes of the returned memory region.
+3. All parent nodes are marked allocated. All child nodes are marked allocated.
 
+On `BuddyAllocator_free(ptr)`:
+1. The tree index is read from the 4 bytes preceding `ptr`.
+2. The node is marked free. All children are marked free.
+3. Parent nodes are freed only if the buddy of each node is also free (coalescing).
 
-## Error Handling
-There are 5 error codes:
-1. <code>BA_Success</code>, success
-2. <code>BA_NotEnoughMemory</code>, not enough memory to satisfy request
-3. <code>BA_UnalignedFree</code>, pointer returned by user to free is not aligned
-4. <code>BA_OutOfRange</code>, pointer returned by user to free is not within allocator memory boundaries
-5. <code>BA_DoubleFree</code>, pointer returned by user points to a memory location that is already free
+The buffer layout is:
 
-The NotEnoughMemory error can only be returned by malloc function, the  BA_UnalignedFree, BA_OutOfRange, BA_DoubleFree errors can only be returned by free function.
+```
+[ BuddyAllocator | BitMap_tree | BitMap | bitmap bytes | ... user memory ... ]
+```
 
+Each allocated user region is prefixed with 4 bytes storing its tree index, enabling O(log n) free without an external lookup table.
 
-## References
-Repository:<br><br>
- https://github.com/laiambryant/buddy_allocator_bitmap
+## Error handling
 
-Original project: <br><br>
-https://gitlab.com/grisetti/sistemi_operativi_2020_21/-/tree/master/source/06_memory_allocation/buddy_allocator.
+`BuddyAllocator_releaseBuddy` returns one of five result codes:
 
-Various sources:<br><br>
-https://stackoverflow.com/questions/29071093/how-to-map-bits-from-a-bitmap-to-physical-pages-in-a-buddy-allocator<br><br>
-https://eatplayhate.me/2010/09/04/memory-management-from-the-ground-up-2-foundations/<br><br>
-https://gitlab.com/grisetti/sistemi_operativi_2020_21/-/blob/master/slides/os_06_memory_allocators.pdf
+| Code | Meaning |
+|---|---|
+| `BA_Success` | Operation succeeded |
+| `BA_NotEnoughMemory` | No free block large enough to satisfy the request |
+| `BA_UnalignedFree` | Pointer is not aligned to a bucket boundary |
+| `BA_OutOfRange` | Pointer is outside the allocator's memory region |
+| `BA_DoubleFree` | Pointer points to a region already marked free |
 
+`BuddyAllocator_malloc` aborts with `assert` on `BA_NotEnoughMemory`. `BuddyAllocator_free` aborts on a `NULL` pointer. Out-of-range, unaligned, and double-free conditions in `BuddyAllocator_free` currently terminate via the return value of `releaseBuddy`; callers can check the result directly via `BuddyAllocator_releaseBuddy` for recoverable error handling.
 
 ## Possible extensions
+
+- **Recoverable error handling in free**: expose `BuddyAllocator_releaseBuddy` errors to the caller of `BuddyAllocator_free` instead of silently ignoring them, so upper layers can log or recover from invalid frees.
+- **Configurable minimum block size**: currently `min_bucket_size` is derived from `buffer_size / 2^(levels-1)`. Accepting it as an explicit parameter would allow callers to tune internal fragmentation.
+- **Thread safety**: adding a mutex around `malloc` and `free` would make the allocator safe for concurrent use with minimal overhead given the O(log n) critical section.
+- **Statistics API**: exposing functions for current fragmentation, peak utilization, and allocation count would make the allocator easier to profile in larger systems.
+- **Slab layer on top**: grouping small, fixed-size allocations into slabs allocated from the buddy system would reduce internal fragmentation for workloads with many same-sized objects.
+
+## References
+
+- Original course project: https://gitlab.com/grisetti/sistemi_operativi_2020_21/-/tree/master/source/06_memory_allocation/buddy_allocator
+- Course slides: https://gitlab.com/grisetti/sistemi_operativi_2020_21/-/blob/master/slides/os_06_memory_allocators.pdf
+- Bitmap buddy mapping: https://stackoverflow.com/questions/29071093/how-to-map-bits-from-a-bitmap-to-physical-pages-in-a-buddy-allocator
+- Memory management foundations: https://eatplayhate.me/2010/09/04/memory-management-from-the-ground-up-2-foundations/
